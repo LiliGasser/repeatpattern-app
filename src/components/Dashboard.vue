@@ -16,27 +16,17 @@
       </aside>
 
       <!-- RIGHT – canvases -->
-      <div class="canvas-wrapper">
-        <canvas
-          ref="canvasA"
-          :width="pcWidth"
-          :height="pcHeight"
-          class="canvas"
-        ></canvas>
-
-        <canvas
-          ref="canvasB"
-          :width="pcWidth"
-          :height="pcHeight"
-          class="canvas"
-        ></canvas>
+     <div class="canvas-wrapper">
+        <div ref="containerA" class="canvas-container"></div>
+        <div ref="containerB" class="canvas-container"></div>
       </div>
     </div>
   </section>
 </template>
 
 <script setup>
-import { ref, watch, onMounted } from 'vue'
+import { ref, watch, onMounted, onBeforeUnmount } from 'vue'
+import p5 from 'p5'
 
 /* -------------------- Reactive state -------------------- */
 // define postcard size (A5 postcard: 148mm x 105mm)
@@ -44,7 +34,7 @@ import { ref, watch, onMounted } from 'vue'
 // laptop screen: 1920 x 1200, 14'' diagonal --> 162 ppi; 60Hz
 const pcWidthMM = 148; // mm
 const pcHeightMM = 105; // mm
-let dpi = 300; // dots per inch
+let dpi = 60; // dots per inch     // TODO higher resolution with responsible canvas size!!!
 let pcWidth = Math.floor(pcWidthMM * dpi / 25.4);
 let pcHeight = Math.floor(pcHeightMM * dpi / 25.4);
 console.log(pcWidth, pcHeight);
@@ -59,40 +49,56 @@ const colours = [
 const bgColor = ref(colours[0])                       // colour shared by both canvases
 
 /* Canvas element references */
-const canvasA = ref(null)
-const canvasB = ref(null)
+const containerA = ref(null)
+const containerB = ref(null)
 
-/* -------------------- Drawing helper -------------------- */
-function drawCanvas(targetCanvas, colour) {
-  if (!targetCanvas) return
-  const ctx = targetCanvas.getContext('2d')
+/* Hold the p5 instances so we can control them later */
+let sketchA = null
+let sketchB = null
 
-  // Background
-  ctx.clearRect(0, 0, targetCanvas.width, targetCanvas.height)
-  ctx.fillStyle = colour
-  ctx.fillRect(0, 0, targetCanvas.width, targetCanvas.height)
+/* ---------- Sketch factory (instance mode) ---------- */
+function makeSketch(containerEl) {
+  // Returns a function that p5 treats as the sketch definition
+  return (p) => {
+    p.setup = () => {
+      // Fixed size – you can change these numbers if you want a different resolution
+      p.createCanvas(pcWidth, pcHeight).parent(containerEl)
+      p.noLoop()               // we only redraw when the colour changes
+    }
 
-  // Simple shape – a centred dark circle
-  const radius = targetCanvas.width * 0.35
-  ctx.beginPath()
-  ctx.arc(targetCanvas.width / 2, targetCanvas.height / 2, radius, 0, Math.PI * 2)
-  ctx.fillStyle = '#333'
-  ctx.fill()
+    p.draw = () => {
+      // Background colour comes from the Vue reactive variable
+      p.background(bgColor.value)
+
+      // Simple centred dark circle (same visual you had before)
+      const r = p.width * 0.35
+      p.fill('#333')
+      p.noStroke()
+      p.circle(p.width / 2, p.height / 2, r * 2)
+    }
+  }
 }
 
-/* Redraw both canvases whenever the colour changes */
-watch(bgColor, () => {
-  drawCanvas(canvasA.value, bgColor.value)
-  drawCanvas(canvasB.value, bgColor.value)
-})
-
-/* Initial draw on mount */
+/* ---------- Lifecycle ---------- */
 onMounted(() => {
-  drawCanvas(canvasA.value, bgColor.value)
-  drawCanvas(canvasB.value, bgColor.value)
+  // Initialise the two p5 instances, each attached to its own container div
+  sketchA = new p5(makeSketch(containerA.value))
+  sketchB = new p5(makeSketch(containerB.value))
 })
 
-/* -------------------- Export logic -------------------- */
+onBeforeUnmount(() => {
+  // Clean up the p5 instances when the component is destroyed
+  if (sketchA) sketchA.remove()
+  if (sketchB) sketchB.remove()
+})
+
+/* ---------- Reactivity: redraw both sketches when colour changes ---------- */
+watch(bgColor, () => {
+  if (sketchA) sketchA.redraw()
+  if (sketchB) sketchB.redraw()
+})
+
+/* ---------- Export logic ---------- */
 function exportCanvases() {
   const triggerDownload = (canvasEl, filename) => {
     const dataUrl = canvasEl.toDataURL('image/png')
@@ -104,8 +110,9 @@ function exportCanvases() {
     document.body.removeChild(link)
   }
 
-  if (canvasA.value) triggerDownload(canvasA.value, 'canvas-a.png')
-  if (canvasB.value) triggerDownload(canvasB.value, 'canvas-b.png')
+  // `sketchA.canvas` and `sketchB.canvas` are the actual <canvas> elements p5 created
+  if (sketchA && sketchA.canvas) triggerDownload(sketchA.canvas, 'canvas-a.png')
+  if (sketchB && sketchB.canvas) triggerDownload(sketchB.canvas, 'canvas-b.png')
 }
 </script>
 
