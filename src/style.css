@@ -16,8 +16,8 @@
 body {
   margin: 0;
   display: flex;
-  place-items: center;    /* TODO why? needed? */
-  min-width: 320px;
+  /* place-items: center;    TODO how to best place app */
+  min-width: 620px;   /* TODO how to do mobile better? */
   min-height: 100vh;
 }
 

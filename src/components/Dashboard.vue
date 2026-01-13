@@ -6,7 +6,7 @@
       <!-- LEFT – control panel -->
       <aside class="sidebar">
         <div class="control-group">
-          <label for="bg-select">Background colour:</label>
+          <label for="bg-select">Background colour</label>
           <select id="bg-select" v-model="bgColor">
             <option v-for="c in colours" :key="c" :value="c">{{ c }}</option>
           </select>
@@ -19,15 +19,15 @@
       <div class="canvas-wrapper">
         <canvas
           ref="canvasA"
-          :width="canvasSize"
-          :height="canvasSize"
+          :width="pcWidth"
+          :height="pcHeight"
           class="canvas"
         ></canvas>
 
         <canvas
           ref="canvasB"
-          :width="canvasSize"
-          :height="canvasSize"
+          :width="pcWidth"
+          :height="pcHeight"
           class="canvas"
         ></canvas>
       </div>
@@ -39,7 +39,15 @@
 import { ref, watch, onMounted } from 'vue'
 
 /* -------------------- Reactive state -------------------- */
-const canvasSize = 300                                 // square size (px)
+// define postcard size (A5 postcard: 148mm x 105mm)
+// calculation: https://imageonline.co/mm-to-px.php
+// laptop screen: 1920 x 1200, 14'' diagonal --> 162 ppi; 60Hz
+const pcWidthMM = 148; // mm
+const pcHeightMM = 105; // mm
+let dpi = 300; // dots per inch
+let pcWidth = Math.floor(pcWidthMM * dpi / 25.4);
+let pcHeight = Math.floor(pcHeightMM * dpi / 25.4);
+console.log(pcWidth, pcHeight);
 const colours = [
   'lightgray',
   '#ff9999',
@@ -103,7 +111,7 @@ function exportCanvases() {
 
 <style scoped>
 .dashboard {
-  max-width: 760px;
+  max-width: 1060px;
   margin: 2rem auto;
   padding: 1rem;
   border: 1px solid #e0e0e0;
@@ -119,7 +127,7 @@ function exportCanvases() {
 
 /* LEFT – control panel */
 .sidebar {
-  flex: 0 0 250px;               /* fixed width */
+  flex: 0 0 200px;               /* fixed width */
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -158,8 +166,7 @@ function exportCanvases() {
 }
 .canvas {
   width: 100%;                  /* fit container width */
-  max-width: 300px;             /* keep original pixel dimensions */
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  max-width: 450px;
+  border: 1px solid #000;
 }
 </style>
