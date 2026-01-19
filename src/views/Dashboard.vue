@@ -36,15 +36,15 @@
           :country-data="selectedCountryData"
           :motif="selectedMotif"
           :symmetry="selectedSymmetry"
-          :drawable-area="drawableArea"
-          :canvas-dimensions="canvasDimensions"
+          :drawable-area="frontDrawableArea"
+          :canvas-dimensions="frontCanvasDimensions"
           :grid-layout="gridLayout"
         />
         <PostcardBack
           :country-data="selectedCountryData"
           :motif="selectedMotif"
-          :drawable-area="drawableArea"
-          :canvas-dimensions="canvasDimensions"
+          :drawable-area="backDrawableArea"
+          :canvas-dimensions="backCanvasDimensions"
         />
       </div>
     </div>
@@ -74,9 +74,10 @@ const {
   layout,
   frameMarginRatio,
   motifsPerRow,
-  postcardDimensions,
-  canvasDimensions,
-  drawableArea,
+  frontCanvasDimensions,
+  frontDrawableArea,
+  backCanvasDimensions,
+  backDrawableArea,
   gridLayout
 } = usePostcardConfig()
 
@@ -102,11 +103,6 @@ const exportPdf = () => {
   font-size: 2.5rem;
   color: #2c3e50;
   margin: 0;
-}
-
-.subtitle {
-  color: #666;
-  font-size: 1.1rem;
 }
 
 .loading,

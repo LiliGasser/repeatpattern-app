@@ -5,32 +5,49 @@ export function usePostcardConfig() {
   const selectedCountry = ref(null)
   const selectedMotif = ref('circles')
   const selectedSymmetry = ref('translation')
-  const layout = ref('landscape') // 'portrait' or 'landscape'
+  const layout = ref('landscape') // 'portrait' or 'landscape' - only for FRONT
   const frameMarginRatio = ref(0.05) // 0 to 0.2
   const motifsPerRow = ref(11) // number of motifs horizontally
   
   // Postcard dimensions in mm (A5)
-  const postcardDimensions = computed(() => {
-    const widthMM = 148
-    const heightMM = 105
-    
+  const baseDimensions = {
+    widthMM: 148,
+    heightMM: 105
+  }
+  
+  // Front postcard dimensions (affected by layout)
+  const frontPostcardDimensions = computed(() => {
     return layout.value === 'landscape' 
-      ? { width: widthMM, height: heightMM }
-      : { width: heightMM, height: widthMM }
+      ? { width: baseDimensions.widthMM, height: baseDimensions.heightMM }
+      : { width: baseDimensions.heightMM, height: baseDimensions.widthMM }
   })
   
-  // Convert to pixels
-  const canvasDimensions = computed(() => {
+  // Back postcard dimensions (always landscape)
+  const backPostcardDimensions = computed(() => {
+    return { width: baseDimensions.widthMM, height: baseDimensions.heightMM }
+  })
+  
+  // Convert front to pixels
+  const frontCanvasDimensions = computed(() => {
     const dpi = 60
-    const widthPx = Math.floor(postcardDimensions.value.width * dpi / 25.4)
-    const heightPx = Math.floor(postcardDimensions.value.height * dpi / 25.4)
+    const widthPx = Math.floor(frontPostcardDimensions.value.width * dpi / 25.4)
+    const heightPx = Math.floor(frontPostcardDimensions.value.height * dpi / 25.4)
     
     return { width: widthPx, height: heightPx }
   })
   
-  // Calculate drawable area after applying frame margin
-  const drawableArea = computed(() => {
-    const { width: widthPx, height: heightPx } = canvasDimensions.value
+  // Convert back to pixels (always landscape)
+  const backCanvasDimensions = computed(() => {
+    const dpi = 60
+    const widthPx = Math.floor(backPostcardDimensions.value.width * dpi / 25.4)
+    const heightPx = Math.floor(backPostcardDimensions.value.height * dpi / 25.4)
+    
+    return { width: widthPx, height: heightPx }
+  })
+  
+  // Calculate drawable area for front after applying frame margin
+  const frontDrawableArea = computed(() => {
+    const { width: widthPx, height: heightPx } = frontCanvasDimensions.value
     const marginPx = Math.floor(Math.min(widthPx, heightPx) * frameMarginRatio.value)
     
     return {
@@ -41,14 +58,27 @@ export function usePostcardConfig() {
     }
   })
   
-  // Calculate grid layout (columns and rows)
+  // Calculate drawable area for back after applying frame margin
+  const backDrawableArea = computed(() => {
+    const { width: widthPx, height: heightPx } = backCanvasDimensions.value
+    const marginPx = Math.floor(Math.min(widthPx, heightPx) * frameMarginRatio.value)
+    
+    return {
+      x: marginPx,
+      y: marginPx,
+      width: widthPx - 2 * marginPx,
+      height: heightPx - 2 * marginPx
+    }
+  })
+  
+  // Calculate grid layout for front (columns and rows)
   const gridLayout = computed(() => {
     const cols = motifsPerRow.value
-    const cellWidth = drawableArea.value.width / cols
+    const cellWidth = frontDrawableArea.value.width / cols
     const cellHeight = cellWidth // Keep cells square
     
     // Calculate how many complete rows fit
-    const rows = Math.floor(drawableArea.value.height / cellHeight)
+    const rows = Math.floor(frontDrawableArea.value.height / cellHeight)
     
     return {
       cols,
@@ -68,10 +98,17 @@ export function usePostcardConfig() {
     frameMarginRatio,
     motifsPerRow,
     
-    // Computed dimensions
-    postcardDimensions,
-    canvasDimensions,
-    drawableArea,
+    // Computed dimensions - FRONT
+    frontPostcardDimensions,
+    frontCanvasDimensions,
+    frontDrawableArea,
+    
+    // Computed dimensions - BACK
+    backPostcardDimensions,
+    backCanvasDimensions,
+    backDrawableArea,
+    
+    // Grid layout (for front)
     gridLayout
   }
 }

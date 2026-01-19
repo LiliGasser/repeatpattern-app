@@ -7,46 +7,45 @@ if (typeof p5SVG === 'function') {
   p5SVG(p5)
 }
 
-/**
- * Composable for managing p5.js SVG canvas instances
- * 
- * @param {Function} sketchFunction - Function that defines p5 sketch (receives p5 instance)
- * @returns {Object} - { container, sketch, redraw }
- */
 export function useP5Svg(sketchFunction) {
   const container = ref(null)
   let sketch = null
+  let currentSketchFunction = sketchFunction
 
-  /**
-   * Initialize the p5 sketch
-   */
   const initSketch = () => {
     if (!container.value) {
       console.warn('Container ref not available yet')
       return
     }
 
+    // Clean up existing sketch first
     if (sketch) {
-      // Clean up existing sketch before creating new one
       sketch.remove()
+      sketch = null
+    }
+    
+    // Clear the container completely
+    while (container.value.firstChild) {
+      container.value.removeChild(container.value.firstChild)
     }
 
-    // Create new p5 instance in instance mode
-    sketch = new p5(sketchFunction, container.value)
+    // Create new sketch
+    sketch = new p5(currentSketchFunction, container.value)
   }
 
-  /**
-   * Redraw the canvas (useful when data changes)
-   */
   const redraw = () => {
     if (sketch && typeof sketch.redraw === 'function') {
       sketch.redraw()
     }
   }
+  
+  const recreate = (newSketchFunction) => {
+    if (newSketchFunction) {
+      currentSketchFunction = newSketchFunction
+    }
+    initSketch()
+  }
 
-  /**
-   * Get the SVG element from the sketch
-   */
   const getSvgElement = () => {
     if (!sketch || !sketch._renderer) {
       console.warn('Sketch or renderer not available')
@@ -55,9 +54,6 @@ export function useP5Svg(sketchFunction) {
     return sketch._renderer.svg
   }
 
-  /**
-   * Get the canvas element from the sketch
-   */
   const getCanvasElement = () => {
     if (!sketch) {
       console.warn('Sketch not available')
@@ -66,17 +62,19 @@ export function useP5Svg(sketchFunction) {
     return sketch.canvas
   }
 
-  /**
-   * Remove the sketch and clean up
-   */
   const cleanup = () => {
     if (sketch) {
       sketch.remove()
       sketch = null
     }
+    // Also clear container
+    if (container.value) {
+      while (container.value.firstChild) {
+        container.value.removeChild(container.value.firstChild)
+      }
+    }
   }
 
-  // Lifecycle hooks
   onMounted(() => {
     initSketch()
   })
@@ -86,11 +84,12 @@ export function useP5Svg(sketchFunction) {
   })
 
   return {
-    container,      // Ref to attach to DOM element
-    sketch,         // The p5 instance (can be null)
-    redraw,         // Function to trigger redraw
-    getSvgElement,  // Get the SVG DOM element
-    getCanvasElement, // Get the canvas element
-    cleanup         // Manual cleanup function
+    container,
+    sketch,
+    redraw,
+    recreate,
+    getSvgElement,
+    getCanvasElement,
+    cleanup
   }
 }

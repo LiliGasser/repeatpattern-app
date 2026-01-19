@@ -20,7 +20,7 @@ const props = defineProps({
   gridLayout: Object
 })
 
-const { container, sketch, redraw } = useP5Svg((p) => {
+const createSketch = () => (p) => {
   p.setup = () => {
     if (!props.canvasDimensions) return
     
@@ -33,12 +33,9 @@ const { container, sketch, redraw } = useP5Svg((p) => {
   }
   
   p.draw = () => {
-    // Set default background
     p.background(255)
     
-    // Don't draw if we don't have the necessary data
     if (!props.countryData || !props.drawableArea || !props.gridLayout) {
-      // Draw a message instead
       p.fill(150)
       p.noStroke()
       p.textAlign(p.CENTER, p.CENTER)
@@ -68,8 +65,19 @@ const { container, sketch, redraw } = useP5Svg((p) => {
       }
     }
   }
-})
+}
 
+const { container, sketch, redraw, recreate } = useP5Svg(createSketch())
+
+// Watch for canvas dimension changes and recreate
+watch(() => props.canvasDimensions, (newDims, oldDims) => {
+  if (newDims && oldDims && 
+      (newDims.width !== oldDims.width || newDims.height !== oldDims.height)) {
+    recreate(createSketch())
+  }
+}, { deep: true })
+
+// Watch for other changes and just redraw
 watch(() => [
   props.countryData, 
   props.motif, 
@@ -91,5 +99,6 @@ h3 {
   border: 1px solid #ddd;
   border-radius: 4px;
   overflow: hidden;
+  width: fit-content;
 }
 </style>
