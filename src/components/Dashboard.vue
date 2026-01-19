@@ -12,7 +12,7 @@
           </select>
         </div>
 
-        <button @click="exportCanvases">Export</button>
+        <button @click="exportSvgs">Export</button>
       </aside>
 
       <!-- RIGHT – canvases -->
@@ -27,6 +27,12 @@
 <script setup>
 import { ref, watch, onMounted, onBeforeUnmount } from 'vue'
 import p5 from 'p5'
+import p5SVG from 'p5.js-svg'
+
+// Register SVG renderer
+if (typeof p5SVG === 'function') {
+  p5SVG(p5)
+}
 
 /* -------------------- Reactive state -------------------- */
 // define postcard size (A5 postcard: 148mm x 105mm)
@@ -46,7 +52,7 @@ const colours = [
   '#ffff99'
 ]
 
-const bgColor = ref(colours[0])                       // colour shared by both canvases
+const bgColor = ref(colours[0])            // colour shared by both canvases
 
 /* Canvas element references */
 const containerA = ref(null)
@@ -62,7 +68,7 @@ function makeSketch(containerEl) {
   return (p) => {
     p.setup = () => {
       // Fixed size – you can change these numbers if you want a different resolution
-      p.createCanvas(pcWidth, pcHeight).parent(containerEl)
+      p.createCanvas(pcWidth, pcHeight, p.SVG).parent(containerEl)
       p.noLoop()               // we only redraw when the colour changes
     }
 
@@ -114,6 +120,47 @@ function exportCanvases() {
   if (sketchA && sketchA.canvas) triggerDownload(sketchA.canvas, 'canvas-a.png')
   if (sketchB && sketchB.canvas) triggerDownload(sketchB.canvas, 'canvas-b.png')
 }
+
+/* ---------- Export logic for SVG ---------- */
+function exportSvgs() {
+  /**
+   * Grab the underlying <svg> element from a p5 instance that uses the SVG renderer,
+   * serialize it, turn it into a Blob, and trigger a download.
+   */
+  const downloadSvg = (sketchInstance, filename) => {
+    console.log('in downloadsvg')
+    console.log(sketchInstance)
+    // The SVG element lives on the renderer object under the property `svg`
+    const svgEl = sketchInstance._renderer?.svg
+    if (!svgEl) {
+      console.warn('SVG element not found for', filename)
+      return
+    }
+
+    // Serialize the SVG DOM to a string
+    const serializer = new XMLSerializer()
+    const svgString = serializer.serializeToString(svgEl)
+
+    // Turn the string into a Blob so the browser can download it
+    const blob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+
+    // Create a temporary link and click it
+    const link = document.createElement('a')
+    link.href = url
+    link.download = filename
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+
+    // Clean up the object URL after a short delay
+    setTimeout(() => URL.revokeObjectURL(url), 1000)
+  }
+
+  if (sketchA) downloadSvg(sketchA, 'canvas-a.svg')
+  if (sketchB) downloadSvg(sketchB, 'canvas-b.svg')
+}
+
 </script>
 
 <style scoped>
