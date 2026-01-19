@@ -64,6 +64,28 @@ const createSketch = () => (p) => {
         p.text('Error drawing pattern', p.width / 2, p.height / 2)
       }
     }
+    
+    // Draw country name centered in the remaining space at the bottom
+    if (props.countryData && props.countryData.country && props.gridLayout) {
+      // Calculate actual height used by the pattern
+      const patternHeight = props.gridLayout.rows * props.gridLayout.cellHeight
+      // Bottom of the pattern area
+      const patternBottom = props.drawableArea.y + patternHeight
+      // Calculate remaining space at the bottom
+      const remainingSpace = p.height - patternBottom
+      // Position text at the midpoint of the remaining space
+      const textY = patternBottom + (remainingSpace / 2)
+      
+      p.fill(0)
+      p.noStroke()
+      p.textAlign(p.CENTER, p.CENTER)
+      p.textSize(16)
+      p.text(
+        props.countryData.country,
+        p.width / 2,
+        textY
+      )
+    }
   }
 }
 
