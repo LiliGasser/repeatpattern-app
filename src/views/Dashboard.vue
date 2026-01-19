@@ -2,13 +2,13 @@
   <div class="dashboard">
     <header class="dashboard-header">
       <h1>Postcard Pattern Creator</h1>
-      <p class="subtitle">Create beautiful geometric patterns based on country data</p>
     </header>
     
     <div v-if="loading" class="loading">Loading country data...</div>
     <div v-else-if="error" class="error">Error: {{ error }}</div>
     
-    <div v-else class="dashboard-layout">
+    <div v-else class="columns">
+      <!-- LEFT – control panel -->
       <aside class="sidebar">
         <ControlPanel
           :country="selectedCountry"
@@ -30,7 +30,8 @@
         </button>
       </aside>
       
-      <main class="postcards-container">
+      <!-- RIGHT – canvases -->
+      <div class="canvas-wrapper">
         <PostcardFront
           :country-data="selectedCountryData"
           :motif="selectedMotif"
@@ -45,7 +46,7 @@
           :drawable-area="drawableArea"
           :canvas-dimensions="canvasDimensions"
         />
-      </main>
+      </div>
     </div>
   </div>
 </template>
@@ -87,8 +88,8 @@ const exportPdf = () => {
 
 <style scoped>
 .dashboard {
-  min-height: 100vh;
-  background-color: #f5f5f5;
+  max-width: 1400px;
+  margin: 0 auto;
   padding: 2rem;
 }
 
@@ -100,7 +101,7 @@ const exportPdf = () => {
 .dashboard-header h1 {
   font-size: 2.5rem;
   color: #2c3e50;
-  margin-bottom: 0.5rem;
+  margin: 0;
 }
 
 .subtitle {
@@ -119,22 +120,24 @@ const exportPdf = () => {
   color: #d63031;
 }
 
-.dashboard-layout {
+/* Two-column layout */
+.columns {
   display: flex;
-  gap: 2rem;
-  max-width: 1400px;
-  margin: 0 auto;
+  gap: 1.5rem;
+  align-items: flex-start;
 }
 
+/* LEFT – control panel */
 .sidebar {
-  flex: 0 0 280px;
+  flex: 0 0 280px;               /* fixed width */
   background: white;
   padding: 1.5rem;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  height: fit-content;
   position: sticky;
   top: 2rem;
+  max-height: calc(100vh - 4rem);
+  overflow-y: auto;
 }
 
 .export-btn {
@@ -155,21 +158,44 @@ const exportPdf = () => {
   background-color: #0052cc;
 }
 
-.postcards-container {
-  flex: 1;
+/* RIGHT – canvases */
+.canvas-wrapper {
+  flex: 1;                       /* take remaining width */
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1.5rem;
 }
 
+/* Responsive: stack on smaller screens */
 @media (max-width: 1024px) {
-  .dashboard-layout {
+  .columns {
     flex-direction: column;
   }
   
   .sidebar {
     flex: 1;
+    width: 100%;
     position: static;
+    max-height: none;
   }
+}
+
+/* Scrollbar styling for sidebar */
+.sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 3px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }
 </style>
