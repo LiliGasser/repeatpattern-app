@@ -1,7 +1,60 @@
+<script setup>
+import { ref } from 'vue'
+import { useCountryData } from '../composables/useCountryData'
+import { usePostcardConfig } from '../composables/usePostcardConfig'
+import { exportPostcardPdf } from '../utils/pdfExport'
+import ControlPanel from '../components/ControlPanel.vue'
+import PostcardFront from '../components/postcards/PostcardFront.vue'
+import PostcardBack from '../components/postcards/PostcardBack.vue'
+
+// Get country data
+const { 
+  countries, 
+  selectedCountry, 
+  selectedCountryData, 
+  loading, 
+  error 
+} = useCountryData()
+
+// Get postcard configuration
+const {
+  selectedMotif,
+  selectedSymmetry,
+  layout,
+  frameMarginRatio,
+  motifsPerRow,
+  frontPostcardDimensions,
+  frontCanvasDimensions,
+  frontDrawableArea,
+  backPostcardDimensions,
+  backCanvasDimensions,
+  backDrawableArea,
+  gridLayout
+} = usePostcardConfig()
+
+// Refs to hold sketch instances from child components
+const frontSketchRef = ref(null)
+const backSketchRef = ref(null)
+
+const exportPdf = async () => {
+  if (!frontSketchRef.value || !backSketchRef.value) {
+    alert('Canvases not ready for export')
+    return
+  }
+  
+  await exportPostcardPdf(
+    frontSketchRef.value,
+    backSketchRef.value,
+    frontPostcardDimensions.value,
+    backPostcardDimensions.value
+  )
+}
+</script>
+
 <template>
   <div class="dashboard">
     <header class="dashboard-header">
-      <h1>Postcard Pattern Creator</h1>
+      <h1>Repeat Pattern Creator</h1>
     </header>
     
     <div v-if="loading" class="loading">Loading country data...</div>
@@ -26,66 +79,34 @@
           :countries="countries"
         />
         <button @click="exportPdf" class="export-btn">
-          📄 Export PDF
+          Export PDF
         </button>
       </aside>
       
       <!-- RIGHT – canvases -->
       <div class="canvas-wrapper">
         <PostcardFront
+          ref="frontPostcard"
           :country-data="selectedCountryData"
           :motif="selectedMotif"
           :symmetry="selectedSymmetry"
           :drawable-area="frontDrawableArea"
           :canvas-dimensions="frontCanvasDimensions"
           :grid-layout="gridLayout"
+          @sketch-ready="frontSketchRef = $event"
         />
         <PostcardBack
+          ref="backPostcard"
           :country-data="selectedCountryData"
           :motif="selectedMotif"
           :drawable-area="backDrawableArea"
           :canvas-dimensions="backCanvasDimensions"
+          @sketch-ready="backSketchRef = $event"
         />
       </div>
     </div>
   </div>
 </template>
-
-<script setup>
-import { useCountryData } from '../composables/useCountryData'
-import { usePostcardConfig } from '../composables/usePostcardConfig'
-import ControlPanel from '../components/ControlPanel.vue'
-import PostcardFront from '../components/postcards/PostcardFront.vue'
-import PostcardBack from '../components/postcards/PostcardBack.vue'
-
-// Get country data
-const { 
-  countries, 
-  selectedCountry, 
-  selectedCountryData, 
-  loading, 
-  error 
-} = useCountryData()
-
-// Get postcard configuration
-const {
-  selectedMotif,
-  selectedSymmetry,
-  layout,
-  frameMarginRatio,
-  motifsPerRow,
-  frontCanvasDimensions,
-  frontDrawableArea,
-  backCanvasDimensions,
-  backDrawableArea,
-  gridLayout
-} = usePostcardConfig()
-
-const exportPdf = () => {
-  console.log('Exporting PDF...')
-  // PDF export logic to be implemented
-}
-</script>
 
 <style scoped>
 .dashboard {

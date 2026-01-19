@@ -6,7 +6,7 @@
 </template>
 
 <script setup>
-import { watch } from 'vue'
+import { watch, onMounted } from 'vue'
 import { useP5Svg } from '../../composables/useP5Svg'
 import { motifs } from '../../motifs'
 
@@ -17,7 +17,9 @@ const props = defineProps({
   canvasDimensions: Object
 })
 
-const { container, sketch, redraw } = useP5Svg((p) => {
+const emit = defineEmits(['sketch-ready'])
+
+const createSketch = () => (p) => {
   p.setup = () => {
     if (!props.canvasDimensions) return
     
@@ -45,14 +47,12 @@ const { container, sketch, redraw } = useP5Svg((p) => {
     
     if (motifObj) {
       try {
-        // Draw one large motif in the center
         const centerX = props.canvasDimensions.width / 2
         const centerY = props.canvasDimensions.height / 3
         const size = Math.min(props.drawableArea.width, props.drawableArea.height) * 0.3
         
         motifObj.draw(p, centerX, centerY, size, props.countryData)
         
-        // Draw explanation text
         const explanation = motifObj.explain(props.countryData)
         
         p.fill('#333')
@@ -75,8 +75,32 @@ const { container, sketch, redraw } = useP5Svg((p) => {
       }
     }
   }
+}
+
+const { container, getSketch, redraw, recreate } = useP5Svg(createSketch())
+
+// Emit sketch after mount
+onMounted(() => {
+  setTimeout(() => {
+    const sketch = getSketch()
+    if (sketch) {
+      emit('sketch-ready', sketch)
+    }
+  }, 100)
 })
 
+// Watch for canvas dimension changes and recreate
+watch(() => props.canvasDimensions, (newDims, oldDims) => {
+  if (newDims && oldDims && 
+      (newDims.width !== oldDims.width || newDims.height !== oldDims.height)) {
+    recreate(createSketch())
+    setTimeout(() => {
+      emit('sketch-ready', getSketch())
+    }, 100)
+  }
+}, { deep: true })
+
+// Watch for other changes and just redraw
 watch(() => [
   props.countryData, 
   props.motif, 
@@ -97,5 +121,6 @@ h3 {
   border: 1px solid #ddd;
   border-radius: 4px;
   overflow: hidden;
+  width: fit-content;
 }
 </style>

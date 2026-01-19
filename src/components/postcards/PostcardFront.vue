@@ -6,7 +6,7 @@
 </template>
 
 <script setup>
-import { watch } from 'vue'
+import { watch, onMounted } from 'vue'
 import { useP5Svg } from '../../composables/useP5Svg'
 import { motifs } from '../../motifs'
 import { symmetries } from '../../symmetries'
@@ -19,6 +19,8 @@ const props = defineProps({
   canvasDimensions: Object,
   gridLayout: Object
 })
+
+const emit = defineEmits(['sketch-ready'])
 
 const createSketch = () => (p) => {
   p.setup = () => {
@@ -67,13 +69,9 @@ const createSketch = () => (p) => {
     
     // Draw country name centered in the remaining space at the bottom
     if (props.countryData && props.countryData.country && props.gridLayout) {
-      // Calculate actual height used by the pattern
       const patternHeight = props.gridLayout.rows * props.gridLayout.cellHeight
-      // Bottom of the pattern area
       const patternBottom = props.drawableArea.y + patternHeight
-      // Calculate remaining space at the bottom
       const remainingSpace = p.height - patternBottom
-      // Position text at the midpoint of the remaining space
       const textY = patternBottom + (remainingSpace / 2)
       
       p.fill(0)
@@ -89,13 +87,26 @@ const createSketch = () => (p) => {
   }
 }
 
-const { container, sketch, redraw, recreate } = useP5Svg(createSketch())
+const { container, getSketch, redraw, recreate } = useP5Svg(createSketch())
+
+// Emit sketch after mount
+onMounted(() => {
+  setTimeout(() => {
+    const sketch = getSketch()
+    if (sketch) {
+      emit('sketch-ready', sketch)
+    }
+  }, 100)
+})
 
 // Watch for canvas dimension changes and recreate
 watch(() => props.canvasDimensions, (newDims, oldDims) => {
   if (newDims && oldDims && 
       (newDims.width !== oldDims.width || newDims.height !== oldDims.height)) {
     recreate(createSketch())
+    setTimeout(() => {
+      emit('sketch-ready', getSketch())
+    }, 100)
   }
 }, { deep: true })
 

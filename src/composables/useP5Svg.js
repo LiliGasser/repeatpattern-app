@@ -31,6 +31,7 @@ export function useP5Svg(sketchFunction) {
 
     // Create new sketch
     sketch = new p5(currentSketchFunction, container.value)
+    return sketch
   }
 
   const redraw = () => {
@@ -43,7 +44,11 @@ export function useP5Svg(sketchFunction) {
     if (newSketchFunction) {
       currentSketchFunction = newSketchFunction
     }
-    initSketch()
+    return initSketch()
+  }
+
+  const getSketch = () => {
+    return sketch
   }
 
   const getSvgElement = () => {
@@ -85,7 +90,7 @@ export function useP5Svg(sketchFunction) {
 
   return {
     container,
-    sketch,
+    getSketch,
     redraw,
     recreate,
     getSvgElement,
