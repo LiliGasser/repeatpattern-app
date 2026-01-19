@@ -1,16 +1,15 @@
 <template>
-  <div class="postcard-wrapper">
+  <div>
     <h3>Front</h3>
     <div ref="container" class="postcard-canvas"></div>
-    <p class="info">{{ gridLayout.cols }} × {{ gridLayout.rows }} = {{ gridLayout.totalMotifs }} motifs</p>
   </div>
 </template>
 
 <script setup>
 import { watch } from 'vue'
-import { useP5Svg } from '@/composables/useP5Svg'
-import { motifs } from '@/motifs'
-import { symmetries } from '@/symmetries'
+import { useP5Svg } from '../../composables/useP5Svg'
+import { motifs } from '../../motifs'
+import { symmetries } from '../../symmetries'
 
 const props = defineProps({
   countryData: Object,
@@ -23,6 +22,8 @@ const props = defineProps({
 
 const { container, sketch, redraw } = useP5Svg((p) => {
   p.setup = () => {
+    if (!props.canvasDimensions) return
+    
     p.createCanvas(
       props.canvasDimensions.width,
       props.canvasDimensions.height,
@@ -32,21 +33,39 @@ const { container, sketch, redraw } = useP5Svg((p) => {
   }
   
   p.draw = () => {
+    // Set default background
     p.background(255)
     
-    if (!props.countryData) return
+    // Don't draw if we don't have the necessary data
+    if (!props.countryData || !props.drawableArea || !props.gridLayout) {
+      // Draw a message instead
+      p.fill(150)
+      p.noStroke()
+      p.textAlign(p.CENTER, p.CENTER)
+      p.textSize(16)
+      p.text('Select a country to see pattern', p.width / 2, p.height / 2)
+      return
+    }
     
     const motifObj = motifs[props.motif]
     const symmetryObj = symmetries[props.symmetry]
     
     if (motifObj && symmetryObj) {
-      symmetryObj.apply(
-        p,
-        props.drawableArea,
-        props.gridLayout,
-        motifObj.draw.bind(motifObj),
-        props.countryData
-      )
+      try {
+        symmetryObj.apply(
+          p,
+          props.drawableArea,
+          props.gridLayout,
+          motifObj.draw.bind(motifObj),
+          props.countryData
+        )
+      } catch (err) {
+        console.error('Error drawing pattern:', err)
+        p.fill(200, 0, 0)
+        p.textAlign(p.CENTER, p.CENTER)
+        p.textSize(14)
+        p.text('Error drawing pattern', p.width / 2, p.height / 2)
+      }
     }
   }
 })
@@ -63,15 +82,14 @@ watch(() => [
 </script>
 
 <style scoped>
-.postcard-wrapper {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+h3 {
+  margin: 0 0 0.5rem 0;
+  color: #2c3e50;
 }
 
-.info {
-  font-size: 0.85rem;
-  color: #666;
-  margin: 0;
+.postcard-canvas {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  overflow: hidden;
 }
 </style>
