@@ -12,7 +12,8 @@
           </select>
         </div>
 
-        <button @click="exportSvgs">Export</button>
+        <button @click="exportSvgs">Export SVGs</button>
+        <button @click="exportPdf">Export PDF</button>
       </aside>
 
       <!-- RIGHT – canvases -->
@@ -28,6 +29,8 @@
 import { ref, watch, onMounted, onBeforeUnmount } from 'vue'
 import p5 from 'p5'
 import p5SVG from 'p5.js-svg'
+import { jsPDF } from 'jspdf'
+import 'svg2pdf.js'
 
 // Register SVG renderer
 if (typeof p5SVG === 'function') {
@@ -104,23 +107,6 @@ watch(bgColor, () => {
   if (sketchB) sketchB.redraw()
 })
 
-/* ---------- Export logic ---------- */
-function exportCanvases() {
-  const triggerDownload = (canvasEl, filename) => {
-    const dataUrl = canvasEl.toDataURL('image/png')
-    const link = document.createElement('a')
-    link.href = dataUrl
-    link.download = filename
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
-  }
-
-  // `sketchA.canvas` and `sketchB.canvas` are the actual <canvas> elements p5 created
-  if (sketchA && sketchA.canvas) triggerDownload(sketchA.canvas, 'canvas-a.png')
-  if (sketchB && sketchB.canvas) triggerDownload(sketchB.canvas, 'canvas-b.png')
-}
-
 /* ---------- Export logic for SVG ---------- */
 function exportSvgs() {
   /**
@@ -159,6 +145,54 @@ function exportSvgs() {
 
   if (sketchA) downloadSvg(sketchA, 'canvas-a.svg')
   if (sketchB) downloadSvg(sketchB, 'canvas-b.svg')
+}
+
+/* ---------- Export logic for PDF ---------- */
+async function exportPdf() {
+  try {
+    // Get SVG elements from both p5 instances
+    const svgA = sketchA?._renderer?.svg
+    const svgB = sketchB?._renderer?.svg
+
+    if (!svgA || !svgB) {
+      console.warn('SVG elements not found')
+      alert('Could not find SVG canvases to export')
+      return
+    }
+
+    // Create PDF with A5 landscape dimensions (matching postcard size)
+    const pdf = new jsPDF({
+      orientation: 'landscape',
+      unit: 'mm',
+      format: [pcHeightMM, pcWidthMM] // [height, width] for landscape
+    })
+
+    // Add first SVG to page 1
+    await pdf.svg(svgA, {
+      x: 0,
+      y: 0,
+      width: pcWidthMM,
+      height: pcHeightMM
+    })
+
+    // Add new page for second SVG
+    pdf.addPage()
+
+    // Add second SVG to page 2
+    await pdf.svg(svgB, {
+      x: 0,
+      y: 0,
+      width: pcWidthMM,
+      height: pcHeightMM
+    })
+
+    // Download the PDF
+    pdf.save('canvases.pdf')
+    
+  } catch (error) {
+    console.error('Error exporting PDF:', error)
+    alert('Failed to export PDF. See console for details.')
+  }
 }
 
 </script>
