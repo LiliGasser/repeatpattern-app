@@ -1,5 +1,5 @@
 export const translationSymmetry = {
-  name: 'Translation (Grid)',
+  name: 'Translation',
   id: 'translation',
   
   /**

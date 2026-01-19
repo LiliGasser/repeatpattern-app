@@ -68,7 +68,8 @@ const createSketch = () => (p) => {
     }
     
     // Draw country name centered in the remaining space at the bottom
-    if (props.countryData && props.countryData.country && props.gridLayout) {
+    console.log(props.countryData);
+    if (props.countryData && props.countryData.country_de && props.gridLayout) {
       const patternHeight = props.gridLayout.rows * props.gridLayout.cellHeight
       const patternBottom = props.drawableArea.y + patternHeight
       const remainingSpace = p.height - patternBottom
@@ -79,7 +80,7 @@ const createSketch = () => (p) => {
       p.textAlign(p.CENTER, p.CENTER)
       p.textSize(16)
       p.text(
-        props.countryData.country,
+        props.countryData.country_de,
         p.width / 2,
         textY
       )

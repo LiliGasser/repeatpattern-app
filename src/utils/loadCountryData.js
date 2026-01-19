@@ -6,6 +6,7 @@ import Papa from 'papaparse'
  *
  * Returns a Map where key is country name and value is an object with all data:
  *   {
+ *     country_de: <string>,
  *     gccs_wtp: <number>,
  *     gccs_wtp_belief: <number>,
  *     gccs_norm: <number>,
@@ -16,7 +17,7 @@ import Papa from 'papaparse'
  *   }
  *
  * @param {string} url – path relative to the public folder
- * @returns {Promise<Map<string, Record<string, number>>>}
+ * @returns {Promise<Map<string, Record<string, any>>>}
  */
 export async function loadCountryMatrix(url = '/data/gccs_country_with_temperature_and_gdp.csv') {
   const resp = await fetch(url)
@@ -38,11 +39,12 @@ export async function loadCountryMatrix(url = '/data/gccs_country_with_temperatu
   const map = new Map()
 
   data.forEach(row => {
-    const country = (row.country_de ?? '').trim()
-    if (!country) return // ignore malformed rows
+    const country_de = (row.country_de ?? '').trim()
+    if (!country_de) return // ignore malformed rows
 
-    // Build the data object for this country (include all columns except country_de)
+    // Build the data object for this country (include all columns)
     const countryData = {
+      country_de: country_de, 
       gccs_wtp: Number(row.gccs_wtp) || 0,
       gccs_wtp_belief: Number(row.gccs_wtp_belief) || 0,
       gccs_norm: Number(row.gccs_norm) || 0,
@@ -51,14 +53,14 @@ export async function loadCountryMatrix(url = '/data/gccs_country_with_temperatu
       gdp: Number(row.gdp) || 0,
       // Include any other columns that might be in the CSV
       ...Object.keys(row).reduce((acc, key) => {
-        if (key !== 'country_de') {
+        if (key !== 'country_de' && !['gccs_wtp', 'gccs_wtp_belief', 'gccs_norm', 'gccs_government', 'temperature', 'gdp'].includes(key)) {
           acc[key] = row[key]
         }
         return acc
       }, {})
     }
     
-    map.set(country, countryData)
+    map.set(country_de, countryData)
   })
 
   return map
