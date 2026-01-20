@@ -48,6 +48,13 @@
         @update:model-value="$emit('update:motifsPerRow', $event)"
       />
     </div>
+    
+    <div class="control-group">
+      <ShowGridCheckbox 
+        :model-value="showGrid"
+        @update:model-value="$emit('update:showGrid', $event)"
+      />
+    </div>
   </div>
 </template>
 
@@ -58,6 +65,7 @@ import SymmetrySelector from './controls/SymmetrySelector.vue'
 import LayoutSelector from './controls/LayoutSelector.vue'
 import FrameMarginSlider from './controls/FrameMarginSlider.vue'
 import MotifsPerRowInput from './controls/MotifsPerRowInput.vue'
+import ShowGridCheckbox from './controls/ShowGridCheckbox.vue'
 
 defineProps({
   country: String,
@@ -66,6 +74,7 @@ defineProps({
   layout: String,
   frameMargin: Number,
   motifsPerRow: Number,
+  showGrid: Boolean,
   countries: Array
 })
 
@@ -75,7 +84,8 @@ defineEmits([
   'update:symmetry',
   'update:layout',
   'update:frameMargin',
-  'update:motifsPerRow'
+  'update:motifsPerRow',
+  'update:showGrid',
 ])
 </script>
 

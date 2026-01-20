@@ -17,7 +17,8 @@ const props = defineProps({
   symmetry: String,
   drawableArea: Object,
   canvasDimensions: Object,
-  gridLayout: Object
+  gridLayout: Object,
+  showGrid: Boolean,
 })
 
 const emit = defineEmits(['sketch-ready'])
@@ -64,6 +65,27 @@ const createSketch = () => (p) => {
         p.textAlign(p.CENTER, p.CENTER)
         p.textSize(14)
         p.text('Error drawing pattern', p.width / 2, p.height / 2)
+      }
+    }
+
+    // Draw grid if enabled
+    if (props.showGrid && props.drawableArea && props.gridLayout) {
+      const { cols, rows, cellWidth, cellHeight } = props.gridLayout
+    
+      p.stroke(200)  // Light gray
+      p.strokeWeight(1)
+      p.noFill()
+    
+      // Draw vertical lines
+      for (let i = 0; i <= cols; i++) {
+        const x = props.drawableArea.x + i * cellWidth
+        p.line(x, props.drawableArea.y, x, props.drawableArea.y + rows * cellHeight)
+      }
+    
+      // Draw horizontal lines
+      for (let j = 0; j <= rows; j++) {
+        const y = props.drawableArea.y + j * cellHeight
+        p.line(props.drawableArea.x, y, props.drawableArea.x + cols * cellWidth, y)
       }
     }
     
@@ -118,7 +140,8 @@ watch(() => [
   props.motif, 
   props.symmetry, 
   props.drawableArea,
-  props.gridLayout
+  props.gridLayout,
+  props.showGrid,
 ], () => {
   redraw()
 }, { deep: true })

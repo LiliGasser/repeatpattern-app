@@ -23,6 +23,7 @@ const {
   layout,
   frameMarginRatio,
   motifsPerRow,
+  showGrid,
   frontPostcardDimensions,
   frontCanvasDimensions,
   frontDrawableArea,
@@ -76,6 +77,8 @@ const exportPdf = async () => {
           @update:frame-margin="frameMarginRatio = $event"
           :motifs-per-row="motifsPerRow"
           @update:motifs-per-row="motifsPerRow = $event"
+          :show-grid="showGrid"
+          @update:show-grid="showGrid = $event"
           :countries="countries"
         />
         <button @click="exportPdf" class="export-btn">
@@ -93,6 +96,7 @@ const exportPdf = async () => {
           :drawable-area="frontDrawableArea"
           :canvas-dimensions="frontCanvasDimensions"
           :grid-layout="gridLayout"
+          :show-grid="showGrid"
           @sketch-ready="frontSketchRef = $event"
         />
         <PostcardBack
