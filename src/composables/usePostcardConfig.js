@@ -6,8 +6,8 @@ export function usePostcardConfig() {
   const selectedMotif = ref('circles')
   const selectedSymmetry = ref('translation')
   const layout = ref('landscape') // 'portrait' or 'landscape' - only for FRONT
-  const frameMarginRatio = ref(0.05) // 0 to 0.2
-  const motifsPerRow = ref(11) // number of motifs horizontally
+  const frameMarginRatio = ref(0.05) // 0 to 0.2 - only for FRONT
+  const motifsPerRow = ref(11) // number of motifs horizontally - only for FRONT
   
   // Postcard dimensions in mm (A5)
   const baseDimensions = {
@@ -45,40 +45,21 @@ export function usePostcardConfig() {
     return { width: widthPx, height: heightPx }
   })
   
-  // Calculate drawable area for front after applying frame margin
-  const frontDrawableArea = computed(() => {
-    const { width: widthPx, height: heightPx } = frontCanvasDimensions.value
-    const marginPx = Math.floor(Math.min(widthPx, heightPx) * frameMarginRatio.value)
-    
-    return {
-      x: marginPx,
-      y: marginPx,
-      width: widthPx - 2 * marginPx,
-      height: heightPx - 2 * marginPx
-    }
-  })
-  
-  // Calculate drawable area for back after applying frame margin
-  const backDrawableArea = computed(() => {
-    const { width: widthPx, height: heightPx } = backCanvasDimensions.value
-    const marginPx = Math.floor(Math.min(widthPx, heightPx) * frameMarginRatio.value)
-    
-    return {
-      x: marginPx,
-      y: marginPx,
-      width: widthPx - 2 * marginPx,
-      height: heightPx - 2 * marginPx
-    }
-  })
-  
-  // Calculate grid layout for front (columns and rows)
+  // Calculate grid layout (columns and rows) - BEFORE calculating drawable area
   const gridLayout = computed(() => {
     const cols = motifsPerRow.value
-    const cellWidth = frontDrawableArea.value.width / cols
+    
+    // Calculate available width and height with frame margin applied
+    const { width: widthPx, height: heightPx } = frontCanvasDimensions.value
+    const marginPx = Math.floor(Math.min(widthPx, heightPx) * frameMarginRatio.value)
+    const availableWidth = widthPx - 2 * marginPx
+    const availableHeight = heightPx - 2 * marginPx
+    
+    const cellWidth = availableWidth / cols
     const cellHeight = cellWidth // Keep cells square
     
     // Calculate how many complete rows fit
-    const rows = Math.floor(frontDrawableArea.value.height / cellHeight)
+    const rows = Math.floor(availableHeight / cellHeight)
     
     return {
       cols,
@@ -86,6 +67,34 @@ export function usePostcardConfig() {
       cellWidth,
       cellHeight,
       totalMotifs: cols * rows
+    }
+  })
+  
+  // Calculate drawable area for front - height is based on actual pattern height
+  const frontDrawableArea = computed(() => {
+    const { width: widthPx, height: heightPx } = frontCanvasDimensions.value
+    const marginPx = Math.floor(Math.min(widthPx, heightPx) * frameMarginRatio.value)
+    
+    // Height is exactly the number of rows * cellHeight
+    const patternHeight = gridLayout.value.rows * gridLayout.value.cellHeight
+    
+    return {
+      x: marginPx,
+      y: marginPx,
+      width: widthPx - 2 * marginPx,
+      height: patternHeight
+    }
+  })
+  
+  // Calculate drawable area for back - entire canvas (no frame margin)
+  const backDrawableArea = computed(() => {
+    const { width: widthPx, height: heightPx } = backCanvasDimensions.value
+    
+    return {
+      x: 0,
+      y: 0,
+      width: widthPx,
+      height: heightPx
     }
   })
   
