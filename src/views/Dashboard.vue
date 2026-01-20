@@ -16,7 +16,9 @@ const {
   error 
 } = useCountryData()
 
-// Get postcard configuration
+// Get postcard configuration - DON'T destructure customColors yet
+const config = usePostcardConfig()
+
 const {
   selectedMotif,
   selectedSymmetry,
@@ -32,7 +34,10 @@ const {
   backCanvasDimensions,
   backDrawableArea,
   gridLayout
-} = usePostcardConfig()
+} = config
+
+// Access customColors from config object
+const customColors = config.customColors
 
 // Refs to hold sketch instances from child components
 const frontSketchRef = ref(null)
@@ -82,6 +87,7 @@ const exportPdf = async () => {
           @update:show-grid="showGrid = $event"
           :palette="selectedPalette"
           @update:palette="selectedPalette = $event"
+          :custom-colors="customColors"
           :countries="countries"
         />
         <button @click="exportPdf" class="export-btn">

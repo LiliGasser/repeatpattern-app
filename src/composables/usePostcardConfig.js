@@ -1,4 +1,5 @@
-import { ref, computed } from 'vue'
+import { ref, watch, computed } from 'vue'
+import { colorPalettes, loadPaletteToCustom } from '../motifs/colors'
 
 export function usePostcardConfig() {
   // All configuration options
@@ -10,6 +11,21 @@ export function usePostcardConfig() {
   const motifsPerRow = ref(11) // number of motifs horizontally - only for FRONT
   const showGrid = ref(false)
   const selectedPalette = ref('icecream')
+
+  // Convert reactive object to computed so Vue tracks it properly
+  const customColors = computed(() => ({
+    wtp: colorPalettes.custom.wtp,
+    wtpBelief: colorPalettes.custom.wtpBelief,
+    norm: colorPalettes.custom.norm,
+    government: colorPalettes.custom.government
+  }))
+
+  // Watch palette changes to update custom colors when switching palettes
+  watch(selectedPalette, (newPalette) => {
+    if (newPalette !== 'custom') {
+      loadPaletteToCustom(newPalette)
+    }
+  })
  
   // Postcard dimensions in mm (A5)
   const baseDimensions = {
@@ -98,6 +114,8 @@ export function usePostcardConfig() {
       height: heightPx
     }
   })
+
+  console.log('colorPalettes.custom:', colorPalettes.custom)  // Debug log
   
   return {
     // Configuration values
@@ -109,6 +127,7 @@ export function usePostcardConfig() {
     motifsPerRow,
     showGrid,
     selectedPalette,
+    customColors, 
     
     // Computed dimensions - FRONT
     frontPostcardDimensions,

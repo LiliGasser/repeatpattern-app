@@ -63,6 +63,33 @@
         @update:model-value="$emit('update:palette', $event)"
       />
     </div>
+
+    <!-- Individual Color Controls -->
+    <div class="control-group colors-group">
+      <label>Custom Colors</label>
+      <div class="color-grid">
+        <ColorPicker 
+          label="WTP"
+          :model-value="customColors.wtp"
+          @update:model-value="handleColorChange('wtp', $event)"
+        />
+        <ColorPicker 
+          label="Norm"
+          :model-value="customColors.norm"
+          @update:model-value="handleColorChange('norm', $event)"
+        />
+        <ColorPicker 
+          label="WTP Belief"
+          :model-value="customColors.wtpBelief"
+          @update:model-value="handleColorChange('wtpBelief', $event)"
+        />
+        <ColorPicker 
+          label="Government"
+          :model-value="customColors.government"
+          @update:model-value="handleColorChange('government', $event)"
+        />
+      </div>
+    </div>
   </div>
 </template>
 
@@ -75,8 +102,10 @@ import FrameMarginSlider from './controls/FrameMarginSlider.vue'
 import MotifsPerRowInput from './controls/MotifsPerRowInput.vue'
 import ShowGridCheckbox from './controls/ShowGridCheckbox.vue'
 import PaletteSelector from './controls/PaletteSelector.vue'
+import ColorPicker from './controls/ColorPicker.vue'
+import { updateCustomColor } from '../motifs/colors'
 
-defineProps({
+const props = defineProps({
   country: String,
   motif: String,
   symmetry: String,
@@ -85,10 +114,11 @@ defineProps({
   motifsPerRow: Number,
   showGrid: Boolean,
   palette: String,
+  customColors: Object,
   countries: Array
 })
 
-defineEmits([
+const emit = defineEmits([
   'update:country',
   'update:motif',
   'update:symmetry',
@@ -98,6 +128,15 @@ defineEmits([
   'update:showGrid',
   'update:palette',
 ])
+
+function handleColorChange(key, value) {
+  // Update the global custom color
+  updateCustomColor(key, value)
+  // Switch to custom palette
+  if (props.palette !== 'custom') {
+    emit('update:palette', 'custom')
+  }
+}
 </script>
 
 <style scoped>
@@ -116,5 +155,18 @@ defineEmits([
 .control-group label {
   font-weight: 600;
   font-size: 0.9rem;
+}
+
+.colors-group {
+  padding: 0.75rem;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+  border: 1px solid #e0e0e0;
+}
+
+.color-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
 }
 </style>
