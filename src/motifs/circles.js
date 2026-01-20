@@ -1,49 +1,59 @@
+import * as d3 from 'd3'
+
 /**
- * Circles Motif
- * Draws concentric circles with colors based on country data
+ * Circles Motif - 2x2 Grid
+ * Four circles representing gccs_wtp, gccs_wtp_belief, gccs_norm, gccs_government
  */
 export const circlesMotif = {
   name: 'Circles',
   id: 'circles',
   
   /**
-   * Draw a single motif unit at position (x, y)
+   * Draw a 2x2 grid of circles with sizes based on GCCS values
    * @param {p5} p - p5 instance
-   * @param {number} x - x position (center)
-   * @param {number} y - y position (center)
-   * @param {number} size - size of the motif unit
+   * @param {number} x - x position (center of the 2x2 grid)
+   * @param {number} y - y position (center of the 2x2 grid)
+   * @param {number} size - size of the motif unit (total space available)
    * @param {Object} countryData - data for the selected country
    */
   draw(p, x, y, size, countryData) {
-    // Get color from country data, or use default
-    // Make sure we always have a valid color string
-    const mainColor = countryData?.color || '#4ECDC4'
+    // Get GCCS values (0-1 range, where 1 = 100%)
+    const wtp = countryData?.gccs_wtp || 0
+    const wtpBelief = countryData?.gccs_wtp_belief || 0
+    const norm = countryData?.gccs_norm || 0
+    const government = countryData?.gccs_government || 0
     
-    // Draw 3 concentric circles
-    const numCircles = 3
+    // Create d3 scaleSqrt for circle radius
+    // This makes the area proportional to the value
+    const minRadius = 0
+    const maxRadius = size * 0.25   // A quarter of the motif size
     
-    for (let i = numCircles; i > 0; i--) {
-      const radius = (size * 0.4 * i) / numCircles
-      
-      // Alternate between filled and stroke circles
-      if (i % 2 === 0) {
-        // Filled circle - ensure fill is set BEFORE noStroke
-        p.fill(mainColor)
-        p.noStroke()
-      } else {
-        // Stroke circle - ensure stroke is set BEFORE noFill
-        p.stroke(mainColor)
-        p.strokeWeight(size * 0.02)
-        p.noFill()
-      }
-      
-      p.circle(x, y, radius * 2)
-    }
+    const radiusScale = d3.scaleSqrt()
+      .domain([0, 100])
+      .range([minRadius, maxRadius])
     
-    // Add center dot - explicitly set fill
-    p.noStroke()
-    p.fill(mainColor)
-    p.circle(x, y, size * 0.05)
+    // Calculate radii for each circle
+    const radiusWtp = radiusScale(wtp)
+    const radiusWtpBelief = radiusScale(wtpBelief)
+    const radiusNorm = radiusScale(norm)
+    const radiusGovernment = radiusScale(government)
+    
+    // Define 2x2 grid positions (relative to center x, y)
+    const offset = size * 0.25   // A quarter of the motif size
+    
+    const positions = [
+      { x: x - offset, y: y - offset, r: radiusWtp, color: '#4ECDC4' },        // Top-left: WTP
+      { x: x + offset, y: y - offset, r: radiusWtpBelief, color: '#45B7D1' }, // Top-right: WTP Belief
+      { x: x - offset, y: y + offset, r: radiusNorm, color: '#96CEB4' },      // Bottom-left: Norm
+      { x: x + offset, y: y + offset, r: radiusGovernment, color: '#FFEAA7' } // Bottom-right: Government
+    ]
+    
+    // Draw each circle
+    positions.forEach(pos => {
+      p.fill(pos.color)
+      p.noStroke()
+      p.circle(pos.x, pos.y, pos.r * 2)  // p5 uses diameter, not radius
+    })
   },
   
   /**
@@ -53,20 +63,28 @@ export const circlesMotif = {
    */
   explain(countryData) {
     if (!countryData) {
-      return 'Concentric circles represent unity and wholeness.'
+      return 'Four circles represent climate change attitudes across different dimensions.'
     }
     
-    const countryName = countryData.name || 'Unknown'
-    const wtp = countryData.gccs_wtp 
-      ? `Climate willingness to pay: ${(countryData.gccs_wtp * 100).toFixed(0)}%`
-      : ''
+    const countryName = countryData.country_de || 'Unknown'
     
-    return `Circles Pattern for ${countryName}
+    // Get values and convert to percentages
+    const wtp = countryData.gccs_wtp || 0
+    const wtpBelief = countryData.gccs_wtp_belief || 0
+    const norm = countryData.gccs_norm || 0
+    const government = countryData.gccs_government || 0
+    
+    const wtpPct = wtp.toFixed(0)
+    const wtpBeliefPct = wtpBelief.toFixed(0)
+    const normPct = norm.toFixed(0)
+    const governmentPct = government.toFixed(0)
+    
+    return `${countryName}
 
-Concentric circles represent unity, harmony, and the interconnected nature of communities. Each ring symbolizes a layer of society, from individuals to the whole nation.
-
-${wtp}
-
-The repeating pattern shows how individual units come together to form a cohesive whole, just as citizens unite to form a nation.`
+Top-left: Willingness to Pay - ${wtpPct}%
+Top-right: WTP Belief - ${wtpBeliefPct}%
+Bottom-left: Social Norm - ${normPct}%
+Bottom-right: Government Action - ${governmentPct}%
+`
   }
 }
