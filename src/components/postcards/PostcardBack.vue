@@ -16,6 +16,7 @@ const props = defineProps({
   drawableArea: Object,
   canvasDimensions: Object,
   showGrid: Boolean,
+  palette: String,
 })
 
 const emit = defineEmits(['sketch-ready'])
@@ -52,7 +53,7 @@ const createSketch = () => (p) => {
         const centerY = props.canvasDimensions.height / 4
         const size = Math.min(props.drawableArea.width, props.drawableArea.height) * 0.3
         
-        motifObj.draw(p, centerX, centerY, size, props.countryData)
+        motifObj.draw(p, centerX, centerY, size, props.countryData, props.palette)
 
         // Draw grid around motif if enabled
         if (props.showGrid) {
@@ -125,6 +126,7 @@ watch(() => [
   props.drawableArea,
   props.canvasDimensions,
   props.showGrid,
+  props.palette,
 ], () => {
   redraw()
 }, { deep: true })

@@ -55,6 +55,14 @@
         @update:model-value="$emit('update:showGrid', $event)"
       />
     </div>
+
+    <div class="control-group">
+      <label>Color Palette</label>
+      <PaletteSelector 
+        :model-value="palette"
+        @update:model-value="$emit('update:palette', $event)"
+      />
+    </div>
   </div>
 </template>
 
@@ -66,6 +74,7 @@ import LayoutSelector from './controls/LayoutSelector.vue'
 import FrameMarginSlider from './controls/FrameMarginSlider.vue'
 import MotifsPerRowInput from './controls/MotifsPerRowInput.vue'
 import ShowGridCheckbox from './controls/ShowGridCheckbox.vue'
+import PaletteSelector from './controls/PaletteSelector.vue'
 
 defineProps({
   country: String,
@@ -75,6 +84,7 @@ defineProps({
   frameMargin: Number,
   motifsPerRow: Number,
   showGrid: Boolean,
+  palette: String,
   countries: Array
 })
 
@@ -86,6 +96,7 @@ defineEmits([
   'update:frameMargin',
   'update:motifsPerRow',
   'update:showGrid',
+  'update:palette',
 ])
 </script>
 

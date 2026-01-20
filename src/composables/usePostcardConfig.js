@@ -9,6 +9,7 @@ export function usePostcardConfig() {
   const frameMarginRatio = ref(0.05) // 0 to 0.2 - only for FRONT
   const motifsPerRow = ref(11) // number of motifs horizontally - only for FRONT
   const showGrid = ref(false)
+  const selectedPalette = ref('icecream')
  
   // Postcard dimensions in mm (A5)
   const baseDimensions = {
@@ -108,6 +109,7 @@ export function usePostcardConfig() {
     frameMarginRatio,
     motifsPerRow,
     showGrid,
+    selectedPalette,
     
     // Computed dimensions - FRONT
     frontPostcardDimensions,

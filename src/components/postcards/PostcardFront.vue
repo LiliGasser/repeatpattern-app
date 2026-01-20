@@ -19,6 +19,7 @@ const props = defineProps({
   canvasDimensions: Object,
   gridLayout: Object,
   showGrid: Boolean,
+  palette: String,
 })
 
 const emit = defineEmits(['sketch-ready'])
@@ -56,7 +57,9 @@ const createSketch = () => (p) => {
           p,
           props.drawableArea,
           props.gridLayout,
-          motifObj.draw.bind(motifObj),
+          (p, x, y, size, countryData) => {
+            motifObj.draw(p, x, y, size, countryData, props.palette)
+          },
           props.countryData
         )
       } catch (err) {
@@ -142,6 +145,7 @@ watch(() => [
   props.drawableArea,
   props.gridLayout,
   props.showGrid,
+  props.palette,
 ], () => {
   redraw()
 }, { deep: true })

@@ -1,4 +1,5 @@
 import * as d3 from 'd3'
+import { getMotifColors } from './colors'
 
 /**
  * Circles Motif - 2x2 Grid
@@ -16,12 +17,15 @@ export const circlesMotif = {
    * @param {number} size - size of the motif unit (total space available)
    * @param {Object} countryData - data for the selected country
    */
-  draw(p, x, y, size, countryData) {
+  draw(p, x, y, size, countryData, palette) {
     // Get GCCS values (0-1 range, where 1 = 100%)
     const wtp = countryData?.gccs_wtp || 0
     const wtpBelief = countryData?.gccs_wtp_belief || 0
     const norm = countryData?.gccs_norm || 0
     const government = countryData?.gccs_government || 0
+
+    // Get colors from selected palette
+    const colors = getMotifColors(palette)
     
     // Create d3 scaleSqrt for circle radius
     // This makes the area proportional to the value
@@ -42,17 +46,17 @@ export const circlesMotif = {
     const offset = size * 0.25   // A quarter of the motif size
     
     const positions = [
-      { x: x - offset, y: y - offset, r: radiusWtp, color: '#4ECDC4' },        // Top-left: WTP
-      { x: x + offset, y: y - offset, r: radiusWtpBelief, color: '#45B7D1' }, // Top-right: WTP Belief
-      { x: x - offset, y: y + offset, r: radiusNorm, color: '#96CEB4' },      // Bottom-left: Norm
-      { x: x + offset, y: y + offset, r: radiusGovernment, color: '#FFEAA7' } // Bottom-right: Government
+      { x: x - offset, y: y - offset, r: radiusWtp, color: colors.wtp },
+      { x: x + offset, y: y - offset, r: radiusWtpBelief, color: colors.wtpBelief },
+      { x: x - offset, y: y + offset, r: radiusNorm, color: colors.norm },
+      { x: x + offset, y: y + offset, r: radiusGovernment, color: colors.government }
     ]
     
     // Draw each circle
     positions.forEach(pos => {
       p.fill(pos.color)
       p.noStroke()
-      p.circle(pos.x, pos.y, pos.r * 2)  // p5 uses diameter, not radius
+      p.circle(pos.x, pos.y, pos.r * 2) 
     })
   },
   
