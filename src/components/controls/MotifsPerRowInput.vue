@@ -7,6 +7,7 @@
       min="2"
       max="20"
       step="1"
+      class="number-input"
     />
     <input 
       type="range" 
@@ -15,6 +16,7 @@
       min="2"
       max="20"
       step="1"
+      class="slider"
     />
   </div>
 </template>
@@ -30,18 +32,61 @@ defineEmits(['update:modelValue'])
 <style scoped>
 .motifs-per-row-control {
   display: flex;
-  gap: 0.5rem;
+  gap: 0.75rem;
   align-items: center;
 }
 
-input[type="number"] {
-  width: 60px;
+.number-input {
+  width: 50px;
   padding: 0.4rem;
   border: 1px solid #ccc;
   border-radius: 4px;
+  font-size: 0.95rem;
+  text-align: center;  /* Changed from default (left) to center */
 }
 
-input[type="range"] {
+.number-input:focus {
+  outline: none;
+  border-color: #0066ff;
+  box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.1);
+}
+
+.slider {
   flex: 1;
+  height: 6px;
+  border-radius: 3px;
+  background: #ddd;
+  outline: none;
+  cursor: pointer;
+}
+
+.slider::-webkit-slider-thumb {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #0066ff;
+  cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #0066ff;
+  cursor: pointer;
+  border: none;
+}
+
+.slider:focus {
+  outline: none;
+}
+
+.slider:focus::-webkit-slider-thumb {
+  box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.2);
+}
+
+.slider:focus::-moz-range-thumb {
+  box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.2);
 }
 </style>

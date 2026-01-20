@@ -163,16 +163,39 @@ const exportPdf = async () => {
   background-color: #0066ff;
   color: white;
   border: none;
-  border-radius: 6px;
+  border-radius: 4px;
   font-size: 1rem;
   font-weight: 600;
   margin-top: 1.5rem;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: all 0.2s;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  user-select: none;
 }
 
 .export-btn:hover {
   background-color: #0052cc;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 102, 255, 0.3);
+}
+
+.export-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 4px rgba(0, 102, 255, 0.2);
+}
+
+.export-btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.3);
+}
+
+.export-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
 /* RIGHT – canvases */
