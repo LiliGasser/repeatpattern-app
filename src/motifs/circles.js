@@ -2,8 +2,8 @@ import * as d3 from 'd3'
 import { getMotifColors } from './colors'
 
 /**
- * Circles Motif - 2x2 Grid
- * Four circles representing gccs_wtp, gccs_wtp_belief, gccs_norm, gccs_government
+ * Circles Motif
+ * Four circles in a 2x2 grid
  */
 export const circlesMotif = {
   name: 'Circles',
@@ -16,21 +16,21 @@ export const circlesMotif = {
    * @param {number} y - y position (center of the 2x2 grid)
    * @param {number} size - size of the motif unit (total space available)
    * @param {Object} countryData - data for the selected country
+   * @param {string} palette - color palette name
    */
   draw(p, x, y, size, countryData, palette) {
-    // Get GCCS values (0-1 range, where 1 = 100%)
+    // Get GCCS values (0-100 range)
     const wtp = countryData?.gccs_wtp || 0
-    const wtpBelief = countryData?.gccs_wtp_belief || 0
     const norm = countryData?.gccs_norm || 0
+    const wtpBelief = countryData?.gccs_wtp_belief || 0
     const government = countryData?.gccs_government || 0
-
+    
     // Get colors from selected palette
     const colors = getMotifColors(palette)
     
     // Create d3 scaleSqrt for circle radius
-    // This makes the area proportional to the value
     const minRadius = 0
-    const maxRadius = size * 0.25   // A quarter of the motif size
+    const maxRadius = size * 0.25
     
     const radiusScale = d3.scaleSqrt()
       .domain([0, 100])
@@ -38,25 +38,26 @@ export const circlesMotif = {
     
     // Calculate radii for each circle
     const radiusWtp = radiusScale(wtp)
-    const radiusWtpBelief = radiusScale(wtpBelief)
     const radiusNorm = radiusScale(norm)
+    const radiusWtpBelief = radiusScale(wtpBelief)
     const radiusGovernment = radiusScale(government)
     
     // Define 2x2 grid positions (relative to center x, y)
-    const offset = size * 0.25   // A quarter of the motif size
+    const offset = size * 0.25
     
+    // NEW ORDER: top-left (WTP), top-right (Norm), bottom-right (WTP Belief), bottom-left (Government)
     const positions = [
-      { x: x - offset, y: y - offset, r: radiusWtp, color: colors.wtp },
-      { x: x + offset, y: y - offset, r: radiusWtpBelief, color: colors.wtpBelief },
-      { x: x - offset, y: y + offset, r: radiusNorm, color: colors.norm },
-      { x: x + offset, y: y + offset, r: radiusGovernment, color: colors.government }
+      { x: x - offset, y: y - offset, r: radiusWtp, color: colors.wtp },                  // Top-left: WTP
+      { x: x + offset, y: y - offset, r: radiusNorm, color: colors.norm },                // Top-right: Norm
+      { x: x + offset, y: y + offset, r: radiusWtpBelief, color: colors.wtpBelief },     // Bottom-right: WTP Belief
+      { x: x - offset, y: y + offset, r: radiusGovernment, color: colors.government }    // Bottom-left: Government
     ]
     
     // Draw each circle
     positions.forEach(pos => {
       p.fill(pos.color)
       p.noStroke()
-      p.circle(pos.x, pos.y, pos.r * 2) 
+      p.circle(pos.x, pos.y, pos.r * 2)
     })
   },
   
@@ -72,23 +73,23 @@ export const circlesMotif = {
     
     const countryName = countryData.country_de || 'Unknown'
     
-    // Get values and convert to percentages
+    // Get values
     const wtp = countryData.gccs_wtp || 0
-    const wtpBelief = countryData.gccs_wtp_belief || 0
     const norm = countryData.gccs_norm || 0
+    const wtpBelief = countryData.gccs_wtp_belief || 0
     const government = countryData.gccs_government || 0
     
     const wtpPct = wtp.toFixed(0)
-    const wtpBeliefPct = wtpBelief.toFixed(0)
     const normPct = norm.toFixed(0)
+    const wtpBeliefPct = wtpBelief.toFixed(0)
     const governmentPct = government.toFixed(0)
     
     return `${countryName}
 
-Top-left: Willingness to Pay - ${wtpPct}%
-Top-right: WTP Belief - ${wtpBeliefPct}%
-Bottom-left: Social Norm - ${normPct}%
-Bottom-right: Government Action - ${governmentPct}%
+Top-left: Willingness to Participate - ${wtpPct}%
+Top-right: Social Norm - ${normPct}%
+Bottom-right: WTP Belief - ${wtpBeliefPct}%
+Bottom-left: Government Action - ${governmentPct}%
 `
   }
 }

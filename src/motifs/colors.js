@@ -4,16 +4,16 @@ export const colorPalettes = {
     icecream: {
     name: 'Ice cream',
     wtp: '#ffc33e',
-    norm: '#646563',
-    wtpBelief: '#f17e84',
+    wtpBelief: '#646563',
+    norm: '#f17e84',
     government: '#5c7d99',
     },
     // Secondary palette: Retro
     retro: {
     name: 'Retro',
     wtp: '#f37124',
-    norm: '#566c67',
-    wtpBelief: '#96b27e',
+    wtpBelief: '#566c67',
+    norm: '#96b27e',
     government: '#67897f',
     },
 };
