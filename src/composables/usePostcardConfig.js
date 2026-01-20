@@ -30,8 +30,8 @@ export function usePostcardConfig() {
   })
   
   // Convert front to pixels
+  const dpi = 100
   const frontCanvasDimensions = computed(() => {
-    const dpi = 60
     const widthPx = Math.floor(frontPostcardDimensions.value.width * dpi / 25.4)
     const heightPx = Math.floor(frontPostcardDimensions.value.height * dpi / 25.4)
     
@@ -40,14 +40,13 @@ export function usePostcardConfig() {
   
   // Convert back to pixels (always landscape)
   const backCanvasDimensions = computed(() => {
-    const dpi = 60
     const widthPx = Math.floor(backPostcardDimensions.value.width * dpi / 25.4)
     const heightPx = Math.floor(backPostcardDimensions.value.height * dpi / 25.4)
     
     return { width: widthPx, height: heightPx }
   })
   
-  // Calculate grid layout (columns and rows) - BEFORE calculating drawable area
+  // Calculate grid layout (columns and rows)
   const gridLayout = computed(() => {
     const cols = motifsPerRow.value
     
@@ -72,7 +71,7 @@ export function usePostcardConfig() {
     }
   })
   
-  // Calculate drawable area for front - height is based on actual pattern height
+  // Calculate drawable area for front
   const frontDrawableArea = computed(() => {
     const { width: widthPx, height: heightPx } = frontCanvasDimensions.value
     const marginPx = Math.floor(Math.min(widthPx, heightPx) * frameMarginRatio.value)
@@ -88,7 +87,7 @@ export function usePostcardConfig() {
     }
   })
   
-  // Calculate drawable area for back - entire canvas (no frame margin)
+  // Calculate drawable area for back
   const backDrawableArea = computed(() => {
     const { width: widthPx, height: heightPx } = backCanvasDimensions.value
     
