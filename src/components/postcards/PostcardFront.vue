@@ -132,7 +132,6 @@ h3 {
 
 .postcard-canvas {
   border: 1px solid #ddd;
-  border-radius: 4px;
   overflow: hidden;
   width: fit-content;
 }

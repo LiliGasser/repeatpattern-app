@@ -47,8 +47,8 @@ const createSketch = () => (p) => {
     
     if (motifObj) {
       try {
-        const centerX = props.canvasDimensions.width / 2
-        const centerY = props.canvasDimensions.height / 3
+        const centerX = props.canvasDimensions.width / 5
+        const centerY = props.canvasDimensions.height / 4
         const size = Math.min(props.drawableArea.width, props.drawableArea.height) * 0.3
         
         motifObj.draw(p, centerX, centerY, size, props.countryData)
@@ -57,16 +57,17 @@ const createSketch = () => (p) => {
         
         p.fill('#333')
         p.noStroke()
-        p.textAlign(p.CENTER, p.TOP)
+        p.textAlign(p.LEFT, p.TOP)
         p.textSize(14)
         p.textWrap(p.WORD)
         
+        const textX = centerX - size/2
         const textY = centerY + size * 0.8
         const textWidth = props.drawableArea.width * 0.8
         
         p.text(
           explanation,
-          props.canvasDimensions.width / 2,
+          textX,
           textY,
           textWidth
         )
@@ -119,7 +120,6 @@ h3 {
 
 .postcard-canvas {
   border: 1px solid #ddd;
-  border-radius: 4px;
   overflow: hidden;
   width: fit-content;
 }
