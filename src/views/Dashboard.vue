@@ -105,6 +105,7 @@ const exportPdf = async () => {
           :motif="selectedMotif"
           :drawable-area="backDrawableArea"
           :canvas-dimensions="backCanvasDimensions"
+          :show-grid="showGrid"
           @sketch-ready="backSketchRef = $event"
         />
       </div>

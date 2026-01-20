@@ -72,8 +72,8 @@ const createSketch = () => (p) => {
     if (props.showGrid && props.drawableArea && props.gridLayout) {
       const { cols, rows, cellWidth, cellHeight } = props.gridLayout
     
-      p.stroke(200)  // Light gray
-      p.strokeWeight(1)
+      p.stroke(200) 
+      p.strokeWeight(0.4)
       p.noFill()
     
       // Draw vertical lines
