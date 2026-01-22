@@ -1,8 +1,20 @@
 import { ref, watch, computed } from 'vue'
 import { colorPalettes, loadPaletteToCustom } from '../motifs/colors'
+import { setTypographyDPI, setFontFamily } from '../utils/typography'
 
 export function usePostcardConfig() {
-  // All configuration options
+  // DPI configuration - single source of truth
+  const dpi = ref(100)
+  
+  // Set DPI in typography utility
+  setTypographyDPI(dpi.value)
+  
+  // Watch DPI changes and update typography
+  watch(dpi, (newDpi) => {
+    setTypographyDPI(newDpi)
+  })
+
+  // Configuration options
   const selectedCountry = ref(null)
   const selectedMotif = ref('circles')
   const selectedSymmetry = ref('translation')
@@ -11,6 +23,14 @@ export function usePostcardConfig() {
   const motifsPerRow = ref(11) // number of motifs horizontally - only for FRONT
   const showGrid = ref(false)
   const selectedPalette = ref('icecream')
+
+  // Typography settings
+  const selectedFont = ref('Arial')
+  
+  // Watch font changes
+  watch(selectedFont, (newFont) => {
+    setFontFamily(newFont)
+  })
 
   // Convert reactive object to computed so Vue tracks it properly
   const customColors = computed(() => ({
@@ -46,19 +66,17 @@ export function usePostcardConfig() {
   })
   
   // Convert front to pixels
-  const dpi = 100
   const frontCanvasDimensions = computed(() => {
-    const widthPx = Math.floor(frontPostcardDimensions.value.width * dpi / 25.4)
-    const heightPx = Math.floor(frontPostcardDimensions.value.height * dpi / 25.4)
+    const widthPx = Math.floor(frontPostcardDimensions.value.width * dpi.value / 25.4)
+    const heightPx = Math.floor(frontPostcardDimensions.value.height * dpi.value / 25.4)
     
     return { width: widthPx, height: heightPx }
   })
-  console.log(frontCanvasDimensions.value)
   
-  // Convert back to pixels (always landscape)
+  // Convert back to pixels
   const backCanvasDimensions = computed(() => {
-    const widthPx = Math.floor(backPostcardDimensions.value.width * dpi / 25.4)
-    const heightPx = Math.floor(backPostcardDimensions.value.height * dpi / 25.4)
+    const widthPx = Math.floor(backPostcardDimensions.value.width * dpi.value / 25.4)
+    const heightPx = Math.floor(backPostcardDimensions.value.height * dpi.value / 25.4)
     
     return { width: widthPx, height: heightPx }
   })
@@ -126,7 +144,9 @@ export function usePostcardConfig() {
     motifsPerRow,
     showGrid,
     selectedPalette,
-    customColors, 
+    customColors,
+    selectedFont,
+    dpi, 
     
     // Computed dimensions - FRONT
     frontPostcardDimensions,

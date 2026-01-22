@@ -9,6 +9,7 @@
 import { watch, onMounted } from 'vue'
 import { useP5Svg } from '../../composables/useP5Svg'
 import { motifs } from '../../motifs'
+import { pointsToPixels } from '../../utils/typography'
 
 const props = defineProps({
   countryData: Object,
@@ -40,7 +41,7 @@ const createSketch = () => (p) => {
       p.fill(150)
       p.noStroke()
       p.textAlign(p.CENTER, p.CENTER)
-      p.textSize(16)
+      p.textSize(pointsToPixels(12))
       p.text('Select a country', p.width / 2, p.height / 2)
       return
     }
@@ -76,7 +77,7 @@ const createSketch = () => (p) => {
         p.fill('#333')
         p.noStroke()
         p.textAlign(p.LEFT, p.TOP)
-        p.textSize(14)
+        p.textSize(pointsToPixels(12))
         p.textWrap(p.WORD)
         
         const textX = centerX - size/2

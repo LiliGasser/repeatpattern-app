@@ -10,6 +10,7 @@ import { watch, onMounted } from 'vue'
 import { useP5Svg } from '../../composables/useP5Svg'
 import { motifs } from '../../motifs'
 import { symmetries } from '../../symmetries'
+import { pointsToPixels } from '../../utils/typography'
 
 const props = defineProps({
   countryData: Object,
@@ -43,7 +44,7 @@ const createSketch = () => (p) => {
       p.fill(150)
       p.noStroke()
       p.textAlign(p.CENTER, p.CENTER)
-      p.textSize(16)
+      p.textSize(pointsToPixels(12))
       p.text('Select a country to see pattern', p.width / 2, p.height / 2)
       return
     }
@@ -66,7 +67,7 @@ const createSketch = () => (p) => {
         console.error('Error drawing pattern:', err)
         p.fill(200, 0, 0)
         p.textAlign(p.CENTER, p.CENTER)
-        p.textSize(14)
+        p.textSize(pointsToPixels(14))
         p.text('Error drawing pattern', p.width / 2, p.height / 2)
       }
     }
@@ -104,7 +105,7 @@ const createSketch = () => (p) => {
       p.fill(0)
       p.noStroke()
       p.textAlign(p.CENTER, p.CENTER)
-      p.textSize(16)
+      p.textSize(pointsToPixels(12))  // 16pt font, DPI-dependent
       p.text(
         props.countryData.country_de,
         p.width / 2,
