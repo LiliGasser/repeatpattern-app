@@ -53,6 +53,7 @@ export function usePostcardConfig() {
     
     return { width: widthPx, height: heightPx }
   })
+  console.log(frontCanvasDimensions.value)
   
   // Convert back to pixels (always landscape)
   const backCanvasDimensions = computed(() => {

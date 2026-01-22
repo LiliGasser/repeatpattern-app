@@ -142,5 +142,8 @@ h3 {
   border: 1px solid #ddd;
   overflow: hidden;
   width: fit-content;
+  margin: 0;
+  padding: 0;
+  line-height: 0;
 }
 </style>
