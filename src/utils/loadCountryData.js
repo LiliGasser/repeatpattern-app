@@ -1,6 +1,22 @@
 import Papa from 'papaparse'
 
 /**
+ * Create four-part explanation for the motif elements
+ */
+function createMotifExplanation(row) {
+  const country_de_prefix = row.country_de_prefix || 'in'
+  const country_de_decl = row.country_de_decl || row.country_de || ''
+  const countryPhrase = `${country_de_prefix} ${country_de_decl}`
+  
+  return {
+    wtp: `${row.gccs_wtp?.toFixed(0) || 0}% der Menschen ${countryPhrase} sind bereit, 1% ihres Einkommens für Klimaschutz zu spenden.`,
+    norm: `${row.gccs_norm?.toFixed(0) || 0}% finden, dass die anderen Menschen ${countryPhrase} mehr für den Klimaschutz tun sollten.`,
+    wtpBelief: `${row.gccs_wtp_belief?.toFixed(0) || 0}% verlangen mehr politisches Handeln von der Regierung.`,
+    government: `Die Menschen denken, dass nur ${row.gccs_government?.toFixed(0) || 0}% der anderen bereit sind, 1% ihres Einkommens zu spenden.`
+  }
+}
+
+/**
  * Load the CSV that contains:
  *   country_de; gccs_wtp; gccs_wtp_belief; gccs_norm; gccs_government; temperature; gdp
  *
@@ -51,6 +67,7 @@ export async function loadCountryMatrix(url = '/data/gccs_country_with_temperatu
       gccs_government: Number(row.gccs_government) || 0,
       temperature: Number(row.temperature) || 0,
       gdp: Number(row.gdp) || 0,
+      motifExplanation: createMotifExplanation(row),
       // Include any other columns that might be in the CSV
       ...Object.keys(row).reduce((acc, key) => {
         if (key !== 'country_de' && !['gccs_wtp', 'gccs_wtp_belief', 'gccs_norm', 'gccs_government', 'temperature', 'gdp'].includes(key)) {

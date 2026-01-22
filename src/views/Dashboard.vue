@@ -27,6 +27,7 @@ const {
   motifsPerRow,
   showGrid,
   selectedPalette,
+  dpi,
   frontPostcardDimensions,
   frontCanvasDimensions,
   frontDrawableArea,
@@ -117,6 +118,7 @@ const exportPdf = async () => {
           :canvas-dimensions="backCanvasDimensions"
           :show-grid="showGrid"
           :palette="selectedPalette"
+          :dpi="dpi"
           @sketch-ready="backSketchRef = $event"
         />
       </div>

@@ -10,6 +10,7 @@ import { watch, onMounted } from 'vue'
 import { useP5Svg } from '../../composables/useP5Svg'
 import { motifs } from '../../motifs'
 import { pointsToPixels } from '../../utils/typography'
+import { getMotifColors } from '../../motifs/colors' 
 
 const props = defineProps({
   countryData: Object,
@@ -18,6 +19,7 @@ const props = defineProps({
   canvasDimensions: Object,
   showGrid: Boolean,
   palette: String,
+  dpi: Number,
 })
 
 const emit = defineEmits(['sketch-ready'])
@@ -45,51 +47,155 @@ const createSketch = () => (p) => {
       p.text('Select a country', p.width / 2, p.height / 2)
       return
     }
+
+    // Set the x position of the separator
+    const midX = props.canvasDimensions.width * 0.575
     
     const motifObj = motifs[props.motif]
     
     if (motifObj) {
       try {
-        const centerX = props.canvasDimensions.width / 5
-        const centerY = props.canvasDimensions.height / 4
+        // LEFT HALF - Content 
+        const centerMotifX = props.canvasDimensions.width*0.28
+        const centerMotifY = props.canvasDimensions.height*0.28
+        const leftTextX = props.canvasDimensions.width*0.02
+        const topTextY = props.canvasDimensions.height*0.02
         const size = Math.min(props.drawableArea.width, props.drawableArea.height) * 0.3
         
-        motifObj.draw(p, centerX, centerY, size, props.countryData, props.palette)
-
+        // Draw motif
+        motifObj.draw(p, centerMotifX, centerMotifY, size, props.countryData, props.palette)
+        
         // Draw grid around motif if enabled
         if (props.showGrid) {
-          p.stroke(200)  // Light gray
+          p.stroke(200)
           p.strokeWeight(0.4)
           p.noFill()
           
-          // Draw a square around the motif
           const gridSize = size
           p.rect(
-            centerX - gridSize / 2,
-            centerY - gridSize / 2,
+            centerMotifX - gridSize / 2,
+            centerMotifY - gridSize / 2,
             gridSize,
             gridSize
           )
         }
+
+        // General settings for text
+        p.noStroke()
+
+        // Write title
+        const titleText = "Sag’s weiter"
+        p.fill(0)
+        p.textAlign(p.LEFT, p.TOP) // TODO Bottom needed, and then p.TextAscent?
+        p.textSize(pointsToPixels(18))
+        p.text(
+          titleText,
+          leftTextX,
+          topTextY,
+        )
         
-        const explanation = motifObj.explain(props.countryData)
+        // Get four-part explanation from country data
+        const explanation = props.countryData.motifExplanation
+        if (explanation) {
+          const explanationFontSize = pointsToPixels(8)
+          p.textSize(explanationFontSize)
+  
+          // Get colors from the selected palette
+          const colors = getMotifColors(props.palette)
+  
+          // Position explanations around the motif
+          const offset = size * 0.6
+  
+          // Calculate available widths for text wrapping
+          const wtpTextWidth = (centerMotifX - size / 2) - leftTextX - 10
+          const rightTextWidth = (midX - 20) - (centerMotifX + offset)  // From offset to separator
+  
+          // Top-left (WTP) - cyan color
+          p.fill(colors.wtp)
+          p.noStroke()
+          p.textAlign(p.LEFT, p.TOP)
+          p.textWrap(p.WORD)
+          p.text(
+            explanation.wtp,
+            leftTextX,
+            topTextY + pointsToPixels(24),
+            wtpTextWidth
+          )
+  
+          // Top-right (Norm) - pink/coral color
+          p.fill(colors.norm)
+          p.textAlign(p.LEFT, p.TOP)
+          p.textWrap(p.WORD)
+          p.text(
+            explanation.norm,
+            centerMotifX + offset,
+            leftTextX,  // Align with top
+            rightTextWidth
+          )
+  
+          // Bottom-right (WTP Belief) - gray color
+          p.fill(colors.wtpBelief)
+          p.textAlign(p.LEFT, p.TOP)
+          p.textWrap(p.WORD)
+          p.text(
+            explanation.wtpBelief,
+            centerMotifX + offset,
+            centerMotifY,
+            rightTextWidth
+          )
+  
+          // Bottom-left (Government) - blue-gray color
+          p.fill(colors.government)
+          p.textAlign(p.LEFT, p.TOP)
+          p.textWrap(p.WORD)
+          const govTextWidth = (centerMotifX - offset) - leftTextX - 10  // From left to offset
+          p.text(
+            explanation.government,
+            leftTextX,
+            centerMotifY + size * 0.3,
+            govTextWidth
+          )
+        }
+        // Write paragraph
+        const paragraphText = "Wem sagst du das weiter?"
+        p.fill(0)
+        p.textAlign(p.LEFT, p.TOP) // TODO Bottom needed, and then p.TextAscent?
+        p.textSize(pointsToPixels(8))
+        p.text(
+          paragraphText,
+          leftTextX,
+          props.canvasDimensions.height*0.55,
+        )
+        
+        // SEPARATOR - Vertical text in the middle
+        // TODO same separator as in v1 (is it a question of font family?)
+        p.push()
+        p.translate(midX, props.canvasDimensions.height / 2)
+        p.rotate(-p.HALF_PI)  // Rotate -90 degrees for vertical text
         
         p.fill('#333')
         p.noStroke()
-        p.textAlign(p.LEFT, p.TOP)
-        p.textSize(pointsToPixels(12))
-        p.textWrap(p.WORD)
+        p.textAlign(p.CENTER, p.CENTER)
+        p.textSize(pointsToPixels(6))
         
-        const textX = centerX - size/2
-        const textY = centerY + size * 0.8
-        const textWidth = props.drawableArea.width * 0.8
+        const separatorText = 'Lilian Gasser . CAS Generative Data Design . Hochschule der Künste Bern . 2025'
+        p.text(separatorText, 0, 0)
         
-        p.text(
-          explanation,
-          textX,
-          textY,
-          textWidth
-        )
+        p.pop()
+
+        // RIGHT HALF - 4 horizontal lines for address
+        // TODO same lines as in v1
+        p.push()
+        p.noFill()
+        p.stroke(0)
+        p.strokeWeight(0.5)
+        p.line(props.canvasDimensions.width * 0.54 + 60 * props.dpi / 150, props.canvasDimensions.height * 0.50, props.canvasDimensions.width - 70 * props.dpi / 150, props.canvasDimensions.height * 0.50)
+        p.line(props.canvasDimensions.width * 0.54 + 60 * props.dpi / 150, props.canvasDimensions.height * 0.58, props.canvasDimensions.width - 70 * props.dpi / 150, props.canvasDimensions.height * 0.58)
+        p.line(props.canvasDimensions.width * 0.54 + 60 * props.dpi / 150, props.canvasDimensions.height * 0.66, props.canvasDimensions.width - 70 * props.dpi / 150, props.canvasDimensions.height * 0.66)
+        p.line(props.canvasDimensions.width * 0.54 + 60 * props.dpi / 150, props.canvasDimensions.height * 0.74, props.canvasDimensions.width - 70 * props.dpi / 150, props.canvasDimensions.height * 0.74)
+        p.pop()
+
+
       } catch (err) {
         console.error('Error drawing back:', err)
       }
