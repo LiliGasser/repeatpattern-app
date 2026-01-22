@@ -34,7 +34,7 @@
     </div>
     
     <div class="control-group">
-      <label>Frame Margin</label>
+      <label>Frame margin</label>
       <FrameMarginSlider 
         :model-value="frameMargin"
         @update:model-value="$emit('update:frameMargin', $event)"
@@ -42,7 +42,7 @@
     </div>
     
     <div class="control-group">
-      <label>Motifs Per Row</label>
+      <label>Motifs per row</label>
       <MotifsPerRowInput 
         :model-value="motifsPerRow"
         @update:model-value="$emit('update:motifsPerRow', $event)"
@@ -57,7 +57,7 @@
     </div>
 
     <div class="control-group">
-      <label>Color Palette</label>
+      <label>Color palette</label>
       <PaletteSelector 
         :model-value="palette"
         @update:model-value="$emit('update:palette', $event)"
@@ -66,7 +66,7 @@
 
     <!-- Individual Color Controls -->
     <div class="control-group colors-group">
-      <label>Custom Colors</label>
+      <label>Custom colors</label>
       <div class="color-grid">
         <ColorPicker 
           label="WTP"
@@ -79,17 +79,18 @@
           @update:model-value="handleColorChange('norm', $event)"
         />
         <ColorPicker 
-          label="WTP Belief"
-          :model-value="customColors.wtpBelief"
-          @update:model-value="handleColorChange('wtpBelief', $event)"
-        />
-        <ColorPicker 
           label="Government"
           :model-value="customColors.government"
           @update:model-value="handleColorChange('government', $event)"
         />
+        <ColorPicker 
+          label="WTP Belief"
+          :model-value="customColors.wtpBelief"
+          @update:model-value="handleColorChange('wtpBelief', $event)"
+        />
       </div>
     </div>
+    <p>WTP: Willingness to participate</p>
   </div>
 </template>
 

@@ -114,8 +114,6 @@ export function usePostcardConfig() {
       height: heightPx
     }
   })
-
-  console.log('colorPalettes.custom:', colorPalettes.custom)  // Debug log
   
   return {
     // Configuration values
