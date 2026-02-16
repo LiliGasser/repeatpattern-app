@@ -10,7 +10,7 @@ import { watch, onMounted } from 'vue'
 import { useP5Svg } from '../../composables/useP5Svg'
 import { motifs } from '../../motifs'
 import { symmetries } from '../../symmetries'
-import { pointsToPixels } from '../../utils/typography'
+import { pointsToPixels, textStyles } from '../../utils/typography'
 
 const props = defineProps({
   countryData: Object,
@@ -105,7 +105,8 @@ const createSketch = () => (p) => {
       p.fill(0)
       p.noStroke()
       p.textAlign(p.CENTER, p.CENTER)
-      p.textSize(pointsToPixels(12))  // 16pt font, DPI-dependent
+      p.textFont(textStyles.value.body.family)  // Use main font
+      p.textSize(pointsToPixels(12))  // 12pt font, DPI-dependent
       p.text(
         props.countryData.country_de,
         p.width / 2,
@@ -147,6 +148,7 @@ watch(() => [
   props.gridLayout,
   props.showGrid,
   props.palette,
+  textStyles.value,
 ], () => {
   redraw()
 }, { deep: true })
