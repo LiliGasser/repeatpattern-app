@@ -9,8 +9,8 @@
 import { watch, onMounted } from 'vue'
 import { useP5Svg } from '../../composables/useP5Svg'
 import { motifs } from '../../motifs'
-import { pointsToPixels } from '../../utils/typography'
-import { getMotifColors } from '../../motifs/colors' 
+import { pointsToPixels, typographyConfig } from '../../utils/typography'
+import { getMotifColors } from '../../motifs/colors'
 
 const props = defineProps({
   countryData: Object,
@@ -88,6 +88,8 @@ const createSketch = () => (p) => {
         p.fill(0)
         p.textAlign(p.LEFT, p.TOP) // TODO Bottom needed, and then p.TextAscent?
         p.textSize(pointsToPixels(18))
+        p.textFont(typographyConfig.value.titleFont)  // Set title font
+        console.log('title font', typographyConfig.value.titleFont)
         p.text(
           titleText,
           leftTextX,
@@ -98,6 +100,8 @@ const createSketch = () => (p) => {
         const explanation = props.countryData.motifExplanation
         if (explanation) {
           const explanationFontSize = pointsToPixels(8)
+          p.textSize(explanationFontSize)
+          p.textFont(typographyConfig.value.mainFont)  // Set main font
           p.textSize(explanationFontSize)
   
           // Get colors from the selected palette
@@ -234,6 +238,8 @@ watch(() => [
   props.canvasDimensions,
   props.showGrid,
   props.palette,
+  typographyConfig.value.titleFont,
+  typographyConfig.value.mainFont   
 ], () => {
   redraw()
 }, { deep: true })

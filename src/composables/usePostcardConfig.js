@@ -1,17 +1,35 @@
 import { ref, watch, computed } from 'vue'
 import { colorPalettes, loadPaletteToCustom } from '../motifs/colors'
-import { setTypographyDPI, setFontFamily } from '../utils/typography'
+import { setTypographyDPI, setTitleFont, setMainFont, typographyConfig } from '../utils/typography'
 
 export function usePostcardConfig() {
-  // DPI configuration - single source of truth
+  // DPI and typography settings
   const dpi = ref(100)
+  const titleFont = ref('Arial')
+  const mainFont = ref('Georgia')
   
-  // Set DPI in typography utility
+  // Set values
   setTypographyDPI(dpi.value)
+  setTitleFont(titleFont.value)
+  setMainFont(mainFont.value)
+
+  // DEBUG LOGS
+  console.log('Initial titleFont:', titleFont.value)
+  console.log('Initial mainFont:', mainFont.value)
+  console.log('Typography config after init:', { ...typographyConfig.value })
   
   // Watch DPI changes and update typography
   watch(dpi, (newDpi) => {
     setTypographyDPI(newDpi)
+  })
+
+  // Watch font changes
+  watch(titleFont, (newFont) => {
+    setTitleFont(newFont)
+  })
+  
+  watch(mainFont, (newFont) => {
+    setMainFont(newFont)
   })
 
   // Configuration options
@@ -23,15 +41,7 @@ export function usePostcardConfig() {
   const motifsPerRow = ref(11) // number of motifs horizontally - only for FRONT
   const showGrid = ref(false)
   const selectedPalette = ref('icecream')
-
-  // Typography settings
-  const selectedFont = ref('Arial')
   
-  // Watch font changes
-  watch(selectedFont, (newFont) => {
-    setFontFamily(newFont)
-  })
-
   // Convert reactive object to computed so Vue tracks it properly
   const customColors = computed(() => ({
     wtp: colorPalettes.custom.wtp,
@@ -145,7 +155,8 @@ export function usePostcardConfig() {
     showGrid,
     selectedPalette,
     customColors,
-    selectedFont,
+    titleFont,
+    mainFont,
     dpi, 
     
     // Computed dimensions - FRONT

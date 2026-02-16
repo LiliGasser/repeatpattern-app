@@ -91,6 +91,22 @@
       </div>
     </div>
     <p>WTP: Willingness to participate</p>
+
+    <div class="control-group">
+      <label>Title Font</label>
+      <FontSelector 
+        :model-value="titleFont"
+        @update:model-value="$emit('update:titleFont', $event)"
+      />
+    </div>
+    
+    <div class="control-group">
+      <label>Main Font</label>
+      <FontSelector 
+        :model-value="mainFont"
+        @update:model-value="$emit('update:mainFont', $event)"
+      />
+    </div>
   </div>
 </template>
 
@@ -104,6 +120,7 @@ import MotifsPerRowInput from './controls/MotifsPerRowInput.vue'
 import ShowGridCheckbox from './controls/ShowGridCheckbox.vue'
 import PaletteSelector from './controls/PaletteSelector.vue'
 import ColorPicker from './controls/ColorPicker.vue'
+import FontSelector from './controls/FontSelector.vue'
 import { updateCustomColor } from '../motifs/colors'
 
 const props = defineProps({
@@ -116,8 +133,14 @@ const props = defineProps({
   showGrid: Boolean,
   palette: String,
   customColors: Object,
+  titleFont: String,
+  mainFont: String,  
   countries: Array
 })
+
+// DEBUG: Log the received props
+console.log('ControlPanel titleFont prop:', props.titleFont)
+console.log('ControlPanel mainFont prop:', props.mainFont)
 
 const emit = defineEmits([
   'update:country',
@@ -128,6 +151,8 @@ const emit = defineEmits([
   'update:motifsPerRow',
   'update:showGrid',
   'update:palette',
+  'update:titleFont',
+  'update:mainFont'   
 ])
 
 function handleColorChange(key, value) {

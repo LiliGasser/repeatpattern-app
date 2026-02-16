@@ -27,6 +27,8 @@ const {
   motifsPerRow,
   showGrid,
   selectedPalette,
+  titleFont, 
+  mainFont,   
   dpi,
   frontPostcardDimensions,
   frontCanvasDimensions,
@@ -89,6 +91,10 @@ const exportPdf = async () => {
           :palette="selectedPalette"
           @update:palette="selectedPalette = $event"
           :custom-colors="customColors"
+          :title-font="titleFont"
+          @update:title-font="titleFont = $event"
+          :main-font="mainFont"
+          @update:main-font="mainFont = $event"
           :countries="countries"
         />
         <button @click="exportPdf" class="export-btn">
