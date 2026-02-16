@@ -208,19 +208,19 @@ const createSketch = () => (p) => {
             }
           })
         }
+
         // Write paragraph
-        const paragraphText = "Wem sagst du das weiter?"
+        const paragraphText = "Dieses Muster wiederholt sich in allen 125 Ländern aus der Studie.\nGlobal wollen 86% der Menschen mehr Klimaschutz von der Bevölkerung,\nwährend 89% mehr Klimaschutz von der Politik verlangen.\nWem sagst du das weiter?"
         p.fill(0)
-        p.textAlign(p.LEFT, p.TOP) // TODO Bottom needed, and then p.TextAscent?
-        p.textSize(pointsToPixels(8))
+        p.textAlign(p.LEFT, p.BOTTOM)
+        p.textSize(pointsToPixels(5))
         p.text(
           paragraphText,
           leftTextX,
-          props.canvasDimensions.height*0.55,
+          props.canvasDimensions.height*0.53,
         )
         
         // SEPARATOR - Vertical text in the middle
-        // TODO same separator as in v1 (is it a question of font family?)
         p.push()
         p.translate(midX, props.canvasDimensions.height / 2)
         p.rotate(-p.HALF_PI)  // Rotate -90 degrees for vertical text
@@ -228,23 +228,33 @@ const createSketch = () => (p) => {
         p.fill('#333')
         p.noStroke()
         p.textAlign(p.CENTER, p.CENTER)
-        p.textSize(pointsToPixels(6))
+        p.textSize(pointsToPixels(4))
         
         const separatorText = 'Lilian Gasser . CAS Generative Data Design . Hochschule der Künste Bern . 2025'
         p.text(separatorText, 0, 0)
-        
         p.pop()
 
+        // SOURCE Information at the bottom
+        const infoText = "Weiterlesen: https://rcap.netlify.app . Datenquelle: Global Climate Change Survey https://gccs.iza.org/"
+        p.fill(0)
+        p.textAlign(p.LEFT, p.BOTTOM)
+        p.textSize(pointsToPixels(4))
+        p.text(
+          infoText,
+          leftTextX,
+          props.canvasDimensions.height*0.97,  // TODO same height as country name on front
+        )
+        
+
         // RIGHT HALF - 4 horizontal lines for address
-        // TODO same lines as in v1
         p.push()
         p.noFill()
         p.stroke(0)
-        p.strokeWeight(0.5)
-        p.line(props.canvasDimensions.width * 0.54 + 60 * props.dpi / 150, props.canvasDimensions.height * 0.50, props.canvasDimensions.width - 70 * props.dpi / 150, props.canvasDimensions.height * 0.50)
-        p.line(props.canvasDimensions.width * 0.54 + 60 * props.dpi / 150, props.canvasDimensions.height * 0.58, props.canvasDimensions.width - 70 * props.dpi / 150, props.canvasDimensions.height * 0.58)
-        p.line(props.canvasDimensions.width * 0.54 + 60 * props.dpi / 150, props.canvasDimensions.height * 0.66, props.canvasDimensions.width - 70 * props.dpi / 150, props.canvasDimensions.height * 0.66)
-        p.line(props.canvasDimensions.width * 0.54 + 60 * props.dpi / 150, props.canvasDimensions.height * 0.74, props.canvasDimensions.width - 70 * props.dpi / 150, props.canvasDimensions.height * 0.74)
+        p.strokeWeight(0.3)
+        p.line(props.canvasDimensions.width * 0.55 + 60 * props.dpi / 150, props.canvasDimensions.height * 0.54, props.canvasDimensions.width - 70 * props.dpi / 150, props.canvasDimensions.height * 0.54)
+        p.line(props.canvasDimensions.width * 0.55 + 60 * props.dpi / 150, props.canvasDimensions.height * 0.62, props.canvasDimensions.width - 70 * props.dpi / 150, props.canvasDimensions.height * 0.62)
+        p.line(props.canvasDimensions.width * 0.55 + 60 * props.dpi / 150, props.canvasDimensions.height * 0.70, props.canvasDimensions.width - 70 * props.dpi / 150, props.canvasDimensions.height * 0.70)
+        p.line(props.canvasDimensions.width * 0.55 + 60 * props.dpi / 150, props.canvasDimensions.height * 0.78, props.canvasDimensions.width - 70 * props.dpi / 150, props.canvasDimensions.height * 0.78)
         p.pop()
 
 
