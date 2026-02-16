@@ -60,7 +60,7 @@ const createSketch = () => (p) => {
         const centerMotifY = props.canvasDimensions.height*0.28
         const leftTextX = props.canvasDimensions.width*0.02
         const topTextY = props.canvasDimensions.height*0.02
-        const size = Math.min(props.drawableArea.width, props.drawableArea.height) * 0.3
+        const size = Math.min(props.drawableArea.width, props.drawableArea.height) * 0.26
         
         // Draw motif
         motifObj.draw(p, centerMotifX, centerMotifY, size, props.countryData, props.palette)
@@ -99,7 +99,7 @@ const createSketch = () => (p) => {
         // Get four-part explanation from country data
         const explanation = props.countryData.motifExplanation
         if (explanation) {
-          const fontSizeLegend = pointsToPixels(8)
+          const fontSizeLegend = pointsToPixels(5)
           const lineHeightLegend = fontSizeLegend * 1.2
           
           p.textFont(typographyConfig.value.mainFont)  // Set main font
@@ -111,8 +111,8 @@ const createSketch = () => (p) => {
           // Position settings from original code
           const xPosLeft = props.canvasDimensions.width * 0.18
           const xPosRight = props.canvasDimensions.width * 0.38
-          const legendTextYStart = topTextY + pointsToPixels(24)
-          const legendTextYStart2 = centerMotifY + size * 0.3
+          const legendTextYStart = topTextY + pointsToPixels(48)
+          const legendTextYStart2 = centerMotifY + size * 0.3 - pointsToPixels(10)
   
           // WTP (top-left) - RIGHT ALIGNED
           p.textAlign(p.RIGHT, p.BOTTOM)

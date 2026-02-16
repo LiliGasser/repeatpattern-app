@@ -9,10 +9,10 @@ function createMotifExplanation(row) {
   const countryPhrase = `${country_de_prefix} ${country_de_decl}`
   
   return {
-    wtp: `${row.gccs_wtp?.toFixed(0) || 0}% der Menschen ${countryPhrase} sind bereit, 1% ihres Einkommens für Klimaschutz zu spenden.`,
-    norm: `${row.gccs_norm?.toFixed(0) || 0}% finden, dass die anderen Menschen ${countryPhrase} mehr für den Klimaschutz tun sollten.`,
-    wtpBelief: `${row.gccs_wtp_belief?.toFixed(0) || 0}% verlangen mehr politisches Handeln von der Regierung.`,
-    government: `Die Menschen denken, dass nur ${row.gccs_government?.toFixed(0) || 0}% der anderen bereit sind, 1% ihres Einkommens zu spenden.`
+    wtp: `${row.gccs_wtp?.toFixed(0) || 0}%\nder Menschen ${country_de_prefix}\n${country_de_decl} sind bereit,\n1% ihres Einkommens für\nKlimaschutz zu spenden.`,
+    norm: `${row.gccs_norm?.toFixed(0) || 0}%\nfinden, dass die\nanderen Menschen ${country_de_prefix}\n${country_de_decl} mehr für\nKlimaschutz tun sollten.`,
+    government: `${row.gccs_government?.toFixed(0) || 0}%\nverlangen mehr\npolitisches Handeln\nvon der Regierung.`,
+    wtpBelief: `Die Menschen denken, dass nur\n${row.gccs_wtp_belief?.toFixed(0) || 0}%\nder anderen bereit sind, 1%\nihres Einkommens zu spenden.`
   }
 }
 
