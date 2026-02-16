@@ -5,8 +5,8 @@ import { setTypographyDPI, setTitleFont, setMainFont, typographyConfig } from '.
 export function usePostcardConfig() {
   // DPI and typography settings
   const dpi = ref(100)
-  const titleFont = ref('Arial')
-  const mainFont = ref('Georgia')
+  const titleFont = ref('the-seasons')
+  const mainFont = ref('soleil')
   
   // Set values
   setTypographyDPI(dpi.value)

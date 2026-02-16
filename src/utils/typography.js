@@ -2,8 +2,8 @@ import { ref, computed } from 'vue'
 
 // Configuration for typography - includes two separate fonts
 export const typographyConfig = ref({
-  titleFont: 'Arial',     // Font for titles
-  mainFont: 'Georgia',    // Font for main text
+  titleFont: 'The Seasons',     // Font for titles
+  mainFont: 'Soleil',    // Font for main text
   dpi: 100
 })
 
@@ -56,16 +56,17 @@ export function setMainFont(fontFamily) {
   typographyConfig.value.mainFont = fontFamily
 }
 
-// Available fonts list
-export const availableFonts = [
-  { value: 'Arial', label: 'Arial' },
-  { value: 'Georgia', label: 'Georgia' },
-  { value: 'Times New Roman', label: 'Times New Roman' },
-  { value: 'Courier New', label: 'Courier New' },
-  { value: 'Verdana', label: 'Verdana' },
-  { value: 'Helvetica', label: 'Helvetica' },
-  { value: 'Palatino', label: 'Palatino' },
-  { value: 'Garamond', label: 'Garamond' },
-  { value: 'Comic Sans MS', label: 'Comic Sans MS' },
-  { value: 'Impact', label: 'Impact' }
+// Available fonts for title - first 3 families
+export const availableTitleFonts = [
+  { value: 'the-seasons', label: 'The Seasons' },
+  { value: 'gelato-luxe', label: 'Gelato Luxe' },
+  { value: 'miller-display', label: 'Miller Display' },
+]
+
+// Available fonts for main text - last 4 families
+export const availableMainFonts = [
+  { value: 'soleil', label: 'Soleil' },
+  { value: 'sofia-pro', label: 'Sofia Pro' },
+  { value: 'halcom', label: 'Halcom' },
+  { value: 'benton-modern-display', label: 'Benton Modern Display' },
 ]

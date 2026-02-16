@@ -97,6 +97,7 @@
       <FontSelector 
         :model-value="titleFont"
         @update:model-value="$emit('update:titleFont', $event)"
+        font-type="title"
       />
     </div>
     
@@ -105,6 +106,7 @@
       <FontSelector 
         :model-value="mainFont"
         @update:model-value="$emit('update:mainFont', $event)"
+        font-type="main"
       />
     </div>
   </div>

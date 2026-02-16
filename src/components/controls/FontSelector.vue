@@ -5,7 +5,7 @@
     class="font-select"
   >
     <option 
-      v-for="option in availableFonts" 
+      v-for="option in fontOptions" 
       :key="option.value" 
       :value="option.value"
     >
@@ -15,13 +15,24 @@
 </template>
 
 <script setup>
-import { availableFonts } from '../../utils/typography'
+import { computed } from 'vue'
+import { availableTitleFonts, availableMainFonts } from '../../utils/typography'
 
 const props = defineProps({
-  modelValue: String
+  modelValue: String,
+  fontType: {
+    type: String,
+    default: 'main',
+    validator: (value) => ['title', 'main'].includes(value)
+  }
 })
 
-console.log('FontSelector modelValue:', props.modelValue)  // Add this
+const fontOptions = computed(() => {
+  return props.fontType === 'title' ? availableTitleFonts : availableMainFonts
+})
+
+console.log('FontSelector modelValue:', props.modelValue)
+console.log('FontSelector fontType:', props.fontType)
 
 defineEmits(['update:modelValue'])
 </script>
