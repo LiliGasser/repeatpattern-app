@@ -99,10 +99,10 @@ const createSketch = () => (p) => {
         // Get four-part explanation from country data
         const explanation = props.countryData.motifExplanation
         if (explanation) {
-          const fontSizeLegend = pointsToPixels(5)
+          const fontSizeLegend = pointsToPixels(5) 
           const lineHeightLegend = fontSizeLegend * 1.2
           
-          p.textFont(typographyConfig.value.mainFont)  // Set main font
+          p.textFont(typographyConfig.value.mainFont) 
           p.noStroke()
   
           // Get colors from the selected palette
@@ -111,50 +111,80 @@ const createSketch = () => (p) => {
           // Position settings from original code
           const xPosLeft = props.canvasDimensions.width * 0.18
           const xPosRight = props.canvasDimensions.width * 0.38
-          const legendTextYStart = topTextY + pointsToPixels(48)
-          const legendTextYStart2 = centerMotifY + size * 0.3 - pointsToPixels(10)
+          const legendTextYStart = topTextY + pointsToPixels(50)
+          const legendTextYStart2 = centerMotifY + size * 0.3 - pointsToPixels(8) 
   
-          // WTP (top-left) - RIGHT ALIGNED
+          // WTP (top-left)
           p.textAlign(p.RIGHT, p.BOTTOM)
           p.fill(colors.wtp)
           
           // Split explanation into lines and render each
           const wtpLines = explanation.wtp.split('\n')
+          const fontSizePercent = pointsToPixels(9) 
+          const lineHeightPercent = fontSizePercent * 1.2
+          let currentY = legendTextYStart
           wtpLines.forEach((line, index) => {
-            p.textSize(fontSizeLegend)
-            p.text(
-              line,
-              xPosLeft,
-              legendTextYStart + index * lineHeightLegend
-            )
+            if (index === 0) {
+              // First line (percentage) - use normal spacing before it
+              p.textSize(fontSizePercent)
+              p.text(line, xPosLeft, currentY)
+            } else {
+              // Regular lines
+              p.textSize(fontSizeLegend)
+              p.text(line, xPosLeft, currentY)
+            }
+            currentY += lineHeightLegend
           })
   
-          // Norm (top-right) - LEFT ALIGNED
+          // Norm (top-right) 
           p.textAlign(p.LEFT, p.BOTTOM)
           p.fill(colors.norm)
           
           const normLines = explanation.norm.split('\n')
+          currentY = legendTextYStart
           normLines.forEach((line, index) => {
-            p.textSize(fontSizeLegend)
-            p.text(
-              line,
-              xPosRight,
-              legendTextYStart + index * lineHeightLegend
-            )
+            if (index === 0) {
+              // First line (percentage)
+              p.textSize(fontSizePercent)
+              p.text(line, xPosRight, currentY)
+            } else {
+              // Regular lines
+              p.textSize(fontSizeLegend)
+              p.text(line, xPosRight, currentY)
+            }
+            currentY += lineHeightLegend
           })
   
           // WTP Belief (bottom-right) - LEFT ALIGNED
           p.textAlign(p.LEFT, p.BOTTOM)
           p.fill(colors.wtpBelief)
+          p.textSize(fontSizeLegend)
+          let txtHeightLegend = p.textAscent() + p.textDescent();
+          p.textSize(fontSizePercent)
+          let txtHeightPercent = p.textAscent() + p.textDescent();
+          let txtHeightDifference = txtHeightPercent - txtHeightLegend;
+          p.textSize(fontSizeLegend)
           
           const wtpBeliefLines = explanation.wtpBelief.split('\n')
+          currentY = legendTextYStart2 - txtHeightDifference
           wtpBeliefLines.forEach((line, index) => {
-            p.textSize(fontSizeLegend)
-            p.text(
-              line,
-              xPosRight,
-              legendTextYStart2 + index * lineHeightLegend
-            )
+            if (index === 0) {
+              // First line - add extra space after
+              p.textSize(fontSizeLegend)
+              p.text(line, xPosRight, currentY)
+              currentY += lineHeightPercent
+
+            } else if (index === 1) {
+              // Second line (percentage)
+              p.textSize(fontSizePercent)
+              p.text(line, xPosRight, currentY)
+              currentY += lineHeightLegend
+            } else {
+              // Regular lines 
+              p.textSize(fontSizeLegend)
+              p.text(line, xPosRight, currentY)
+              currentY += lineHeightLegend
+            }
           })
   
           // Government (bottom-left) - RIGHT ALIGNED
@@ -162,13 +192,20 @@ const createSketch = () => (p) => {
           p.fill(colors.government)
           
           const govLines = explanation.government.split('\n')
+          currentY = legendTextYStart2  // Start at base position, same as WTP Belief
           govLines.forEach((line, index) => {
-            p.textSize(fontSizeLegend)
-            p.text(
-              line,
-              xPosLeft,
-              legendTextYStart2 + index * lineHeightLegend
-            )
+            if (index === 0) {
+              // First line (percentage) - add extra space for larger font
+              //currentY += lineHeightPercent  // Extra space for percentage
+              p.textSize(fontSizePercent)
+              p.text(line, xPosLeft, currentY)
+              currentY += lineHeightLegend
+            } else {
+              // Regular lines
+              p.textSize(fontSizeLegend)
+              p.text(line, xPosLeft, currentY)
+              currentY += lineHeightLegend
+            }
           })
         }
         // Write paragraph
