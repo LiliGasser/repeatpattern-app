@@ -99,66 +99,77 @@ const createSketch = () => (p) => {
         // Get four-part explanation from country data
         const explanation = props.countryData.motifExplanation
         if (explanation) {
-          const explanationFontSize = pointsToPixels(8)
-          p.textSize(explanationFontSize)
+          const fontSizeLegend = pointsToPixels(8)
+          const lineHeightLegend = fontSizeLegend * 1.2
+          
           p.textFont(typographyConfig.value.mainFont)  // Set main font
-          p.textSize(explanationFontSize)
+          p.noStroke()
   
           // Get colors from the selected palette
           const colors = getMotifColors(props.palette)
   
-          // Position explanations around the motif
-          const offset = size * 0.6
+          // Position settings from original code
+          const xPosLeft = props.canvasDimensions.width * 0.18
+          const xPosRight = props.canvasDimensions.width * 0.38
+          const legendTextYStart = topTextY + pointsToPixels(24)
+          const legendTextYStart2 = centerMotifY + size * 0.3
   
-          // Calculate available widths for text wrapping
-          const wtpTextWidth = (centerMotifX - size / 2) - leftTextX - 10
-          const rightTextWidth = (midX - 20) - (centerMotifX + offset)  // From offset to separator
-  
-          // Top-left (WTP) - cyan color
+          // WTP (top-left) - RIGHT ALIGNED
+          p.textAlign(p.RIGHT, p.BOTTOM)
           p.fill(colors.wtp)
-          p.noStroke()
-          p.textAlign(p.LEFT, p.TOP)
-          p.textWrap(p.WORD)
-          p.text(
-            explanation.wtp,
-            leftTextX,
-            topTextY + pointsToPixels(24),
-            wtpTextWidth
-          )
+          
+          // Split explanation into lines and render each
+          const wtpLines = explanation.wtp.split('\n')
+          wtpLines.forEach((line, index) => {
+            p.textSize(fontSizeLegend)
+            p.text(
+              line,
+              xPosLeft,
+              legendTextYStart + index * lineHeightLegend
+            )
+          })
   
-          // Top-right (Norm) - pink/coral color
+          // Norm (top-right) - LEFT ALIGNED
+          p.textAlign(p.LEFT, p.BOTTOM)
           p.fill(colors.norm)
-          p.textAlign(p.LEFT, p.TOP)
-          p.textWrap(p.WORD)
-          p.text(
-            explanation.norm,
-            centerMotifX + offset,
-            leftTextX,  // Align with top
-            rightTextWidth
-          )
+          
+          const normLines = explanation.norm.split('\n')
+          normLines.forEach((line, index) => {
+            p.textSize(fontSizeLegend)
+            p.text(
+              line,
+              xPosRight,
+              legendTextYStart + index * lineHeightLegend
+            )
+          })
   
-          // Bottom-right (WTP Belief) - gray color
+          // WTP Belief (bottom-right) - LEFT ALIGNED
+          p.textAlign(p.LEFT, p.BOTTOM)
           p.fill(colors.wtpBelief)
-          p.textAlign(p.LEFT, p.TOP)
-          p.textWrap(p.WORD)
-          p.text(
-            explanation.wtpBelief,
-            centerMotifX + offset,
-            centerMotifY,
-            rightTextWidth
-          )
+          
+          const wtpBeliefLines = explanation.wtpBelief.split('\n')
+          wtpBeliefLines.forEach((line, index) => {
+            p.textSize(fontSizeLegend)
+            p.text(
+              line,
+              xPosRight,
+              legendTextYStart2 + index * lineHeightLegend
+            )
+          })
   
-          // Bottom-left (Government) - blue-gray color
+          // Government (bottom-left) - RIGHT ALIGNED
+          p.textAlign(p.RIGHT, p.BOTTOM)
           p.fill(colors.government)
-          p.textAlign(p.LEFT, p.TOP)
-          p.textWrap(p.WORD)
-          const govTextWidth = (centerMotifX - offset) - leftTextX - 10  // From left to offset
-          p.text(
-            explanation.government,
-            leftTextX,
-            centerMotifY + size * 0.3,
-            govTextWidth
-          )
+          
+          const govLines = explanation.government.split('\n')
+          govLines.forEach((line, index) => {
+            p.textSize(fontSizeLegend)
+            p.text(
+              line,
+              xPosLeft,
+              legendTextYStart2 + index * lineHeightLegend
+            )
+          })
         }
         // Write paragraph
         const paragraphText = "Wem sagst du das weiter?"
