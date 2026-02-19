@@ -27,22 +27,26 @@ export function useCountryData() {
     error.value = null
 
     try {
-      // Load GCCS matrix data
+      // Load GCCS matrix data (keyed by country_de)
       countryDataMap.value = await loadCountryMatrix()
       
       // Build countries array from the map
-      countries.value = Array.from(countryDataMap.value.entries()).map(([name, data]) => ({
-        code: name.toLowerCase().replace(/\s+/g, '-'), // Create URL-friendly code
-        name: name,
+      countries.value = Array.from(countryDataMap.value.entries()).map(([name_de, data]) => ({
+        code: name_de.toLowerCase().replace(/\s+/g, '-'), // Create URL-friendly code
+        country_de: name_de,  // German name (used as value)
         ...data
       }))
 
       console.log('Loaded data for', countries.value.length, 'countries')
       console.log('Countries:', countries.value)
 
-      // Auto-select first country if none selected
-      if (countries.value.length > 0 && !selectedCountry.value) {
-        selectedCountry.value = countries.value[0].name
+      // Auto-select Switzerland (Schweiz) as default
+      const switzerlandEntry = countries.value.find(c => c.country_de === 'Schweiz')
+      if (switzerlandEntry && !selectedCountry.value) {
+        selectedCountry.value = switzerlandEntry.country_de
+      } else if (countries.value.length > 0 && !selectedCountry.value) {
+        // Fallback to first country if Switzerland not found
+        selectedCountry.value = countries.value[0].country_de
       }
 
       loading.value = false

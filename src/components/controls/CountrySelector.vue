@@ -7,10 +7,10 @@
     <option :value="null" disabled>Select a country...</option>
     <option 
       v-for="country in countries" 
-      :key="country.name" 
-      :value="country.name"
+      :key="country.country_de" 
+      :value="country.country_de"
     >
-      {{ country.name }}
+      {{ country.country }}
     </option>
   </select>
 </template>
