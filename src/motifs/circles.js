@@ -4,6 +4,7 @@ import { getMotifColors } from './colors'
 /**
  * Circles Motif
  * Four circles in a 2x2 grid
+ * Positioning: top-left (WTP), top-right (Norm), bottom-right (WTP Belief), bottom-left (Government)
  */
 export const circlesMotif = {
   name: 'Circles',
@@ -45,12 +46,35 @@ export const circlesMotif = {
     // Define 2x2 grid positions (relative to center x, y)
     const offset = size * 0.25
     
-    // NEW ORDER: top-left (WTP), top-right (Norm), bottom-right (WTP Belief), bottom-left (Government)
     const positions = [
-      { x: x - offset, y: y - offset, r: radiusWtp, color: colors.wtp },                  // Top-left: WTP
-      { x: x + offset, y: y - offset, r: radiusNorm, color: colors.norm },                // Top-right: Norm
-      { x: x + offset, y: y + offset, r: radiusWtpBelief, color: colors.wtpBelief },     // Bottom-right: WTP Belief
-      { x: x - offset, y: y + offset, r: radiusGovernment, color: colors.government }    // Bottom-left: Government
+      // Top left: WTP
+      { 
+        x: x - offset, 
+        y: y - offset, 
+        r: radiusWtp, 
+        color: colors.wtp 
+      },
+      // Top right: Norm
+      { 
+        x: x + offset, 
+        y: y - offset, 
+        r: radiusNorm, 
+        color: colors.norm 
+      },
+      // Bottom right: WTP Belief
+      { 
+        x: x + offset, 
+        y: y + offset, 
+        r: radiusWtpBelief, 
+        color: colors.wtpBelief 
+      },
+      // Bottom left: Government
+      { 
+        x: x - offset, 
+        y: y + offset, 
+        r: radiusGovernment, 
+        color: colors.government 
+      }
     ]
     
     // Draw each circle
@@ -59,37 +83,5 @@ export const circlesMotif = {
       p.noStroke()
       p.circle(pos.x, pos.y, pos.r * 2)
     })
-  },
-  
-  /**
-   * Generate explanation text for the back of the postcard
-   * @param {Object} countryData - data for the selected country
-   * @returns {string} - explanation text
-   */
-  explain(countryData) {
-    if (!countryData) {
-      return 'Four circles represent climate change attitudes across different dimensions.'
-    }
-    
-    const countryName = countryData.country_de || 'Unknown'
-    
-    // Get values
-    const wtp = countryData.gccs_wtp || 0
-    const norm = countryData.gccs_norm || 0
-    const wtpBelief = countryData.gccs_wtp_belief || 0
-    const government = countryData.gccs_government || 0
-    
-    const wtpPct = wtp.toFixed(0)
-    const normPct = norm.toFixed(0)
-    const wtpBeliefPct = wtpBelief.toFixed(0)
-    const governmentPct = government.toFixed(0)
-    
-    return `${countryName}
-
-Top-left: Willingness to Participate - ${wtpPct}%
-Top-right: Social Norm - ${normPct}%
-Bottom-right: WTP Belief - ${wtpBeliefPct}%
-Bottom-left: Government Action - ${governmentPct}%
-`
   }
 }
