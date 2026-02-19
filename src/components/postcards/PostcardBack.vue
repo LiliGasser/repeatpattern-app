@@ -62,9 +62,12 @@ const createSketch = () => (p) => {
         const leftTextX = props.canvasDimensions.width*0.02
         const topTextY = props.canvasDimensions.height*0.02
         const size = Math.min(props.drawableArea.width, props.drawableArea.height) * 0.26
+
+        // Adjust size for wind wheel motif (45° rotation makes it extend beyond bounds)
+        const adjustedSize = props.motif === 'wind-wheel' ? size * 0.82 : size
         
         // Draw motif
-        motifObj.draw(p, centerMotifX, centerMotifY, size, props.countryData, props.palette)
+        motifObj.draw(p, centerMotifX, centerMotifY, adjustedSize, props.countryData, props.palette)
         
         // Draw grid around motif if enabled
         if (props.showGrid) {
@@ -72,7 +75,7 @@ const createSketch = () => (p) => {
           p.strokeWeight(0.4)
           p.noFill()
           
-          const gridSize = size
+          const gridSize = adjustedSize
           p.rect(
             centerMotifX - gridSize / 2,
             centerMotifY - gridSize / 2,
