@@ -1,6 +1,6 @@
-import { circlesMotif } from './circles'
-//import { squaresMotif } from './squares'
-//import { trianglesMotif } from './triangles'
+import { circlesMotif } from './circlesMotif'
+//import { squaresMotif } from './squaresMotif'
+//import { trianglesMotif } from './trianglesMotif'
 
 // Export all motifs as an object
 export const motifs = {
