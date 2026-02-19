@@ -19,6 +19,7 @@ const props = defineProps({
   canvasDimensions: Object,
   showGrid: Boolean,
   palette: String,
+  customColors: Object, 
   dpi: Number,
 })
 
@@ -251,7 +252,6 @@ const createSketch = () => (p) => {
           leftTextX,
           props.canvasDimensions.height*0.97,  // TODO same height as country name on front
         )
-        
 
         // RIGHT HALF - 4 horizontal lines for address
         p.push()
@@ -303,6 +303,7 @@ watch(() => [
   props.canvasDimensions,
   props.showGrid,
   props.palette,
+  props.customColors, 
   typographyConfig.value.titleFont,
   typographyConfig.value.mainFont   
 ], () => {

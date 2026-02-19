@@ -21,6 +21,7 @@ const props = defineProps({
   gridLayout: Object,
   showGrid: Boolean,
   palette: String,
+  customColors: Object,  // Add customColors prop
 })
 
 const emit = defineEmits(['sketch-ready'])
@@ -148,7 +149,8 @@ watch(() => [
   props.gridLayout,
   props.showGrid,
   props.palette,
-  textStyles.value,
+  props.customColors,  // Watch for custom color changes
+  textStyles.value,  // Watch for font changes
 ], () => {
   redraw()
 }, { deep: true })

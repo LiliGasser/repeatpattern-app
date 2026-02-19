@@ -158,12 +158,11 @@ const emit = defineEmits([
 ])
 
 function handleColorChange(key, value) {
+  console.log('Color change:', key, value)
   // Update the global custom color
   updateCustomColor(key, value)
-  // Switch to custom palette
-  if (props.palette !== 'custom') {
-    emit('update:palette', 'custom')
-  }
+  // Switch to custom palette - this will trigger the computed customColors to update
+  emit('update:palette', 'custom')
 }
 </script>
 

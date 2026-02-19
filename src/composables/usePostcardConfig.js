@@ -1,5 +1,5 @@
 import { ref, watch, computed } from 'vue'
-import { colorPalettes, loadPaletteToCustom } from '../motifs/colors'
+import { colorPalettes, customPalette, loadPaletteToCustom } from '../motifs/colors'
 import { setTypographyDPI, setTitleFont, setMainFont, typographyConfig } from '../utils/typography'
 
 export function usePostcardConfig() {
@@ -43,11 +43,12 @@ export function usePostcardConfig() {
   const selectedPalette = ref('icecream')
   
   // Convert reactive object to computed so Vue tracks it properly
+  // Use customPalette directly for proper reactivity
   const customColors = computed(() => ({
-    wtp: colorPalettes.custom.wtp,
-    wtpBelief: colorPalettes.custom.wtpBelief,
-    norm: colorPalettes.custom.norm,
-    government: colorPalettes.custom.government
+    wtp: customPalette.wtp,
+    wtpBelief: customPalette.wtpBelief,
+    norm: customPalette.norm,
+    government: customPalette.government
   }))
 
   // Watch palette changes to update custom colors when switching palettes

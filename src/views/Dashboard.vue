@@ -114,6 +114,7 @@ const exportPdf = async () => {
           :grid-layout="gridLayout"
           :show-grid="showGrid"
           :palette="selectedPalette"
+          :custom-colors="customColors"
           @sketch-ready="frontSketchRef = $event"
         />
         <PostcardBack
@@ -124,6 +125,7 @@ const exportPdf = async () => {
           :canvas-dimensions="backCanvasDimensions"
           :show-grid="showGrid"
           :palette="selectedPalette"
+          :custom-colors="customColors"
           :dpi="dpi"
           @sketch-ready="backSketchRef = $event"
         />
