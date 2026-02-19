@@ -1,10 +1,11 @@
 import * as d3 from 'd3'
 import { getMotifColors } from './colors'
+import { MOTIF_POSITIONS } from './positions'
 
 /**
  * Circles Motif
  * Four circles in a 2x2 grid
- * Positioning: top-left (WTP), top-right (Norm), bottom-right (WTP Belief), bottom-left (Government)
+ * Positioning: Defined in positions.js
  */
 export const circlesMotif = {
   name: 'Circles',
@@ -21,67 +22,31 @@ export const circlesMotif = {
    */
   draw(p, x, y, size, countryData, palette) {
     // Get GCCS values (0-100 range)
-    const wtp = countryData?.gccs_wtp || 0
-    const norm = countryData?.gccs_norm || 0
-    const wtpBelief = countryData?.gccs_wtp_belief || 0
-    const government = countryData?.gccs_government || 0
+    const values = {
+      wtp: countryData?.gccs_wtp || 0,
+      norm: countryData?.gccs_norm || 0,
+      wtpBelief: countryData?.gccs_wtp_belief || 0,
+      government: countryData?.gccs_government || 0
+    }
     
     // Get colors from selected palette
     const colors = getMotifColors(palette)
     
     // Create d3 scaleSqrt for circle radius
-    const minRadius = 0
-    const maxRadius = size * 0.25
-    
     const radiusScale = d3.scaleSqrt()
       .domain([0, 100])
-      .range([minRadius, maxRadius])
+      .range([0, size * 0.25])
     
-    // Calculate radii for each circle
-    const radiusWtp = radiusScale(wtp)
-    const radiusNorm = radiusScale(norm)
-    const radiusWtpBelief = radiusScale(wtpBelief)
-    const radiusGovernment = radiusScale(government)
-    
-    // Define 2x2 grid positions (relative to center x, y)
-    const offset = size * 0.25
-    
-    const positions = [
-      // Top left: WTP
-      { 
-        x: x - offset, 
-        y: y - offset, 
-        r: radiusWtp, 
-        color: colors.wtp 
-      },
-      // Top right: Norm
-      { 
-        x: x + offset, 
-        y: y - offset, 
-        r: radiusNorm, 
-        color: colors.norm 
-      },
-      // Bottom right: WTP Belief
-      { 
-        x: x + offset, 
-        y: y + offset, 
-        r: radiusWtpBelief, 
-        color: colors.wtpBelief 
-      },
-      // Bottom left: Government
-      { 
-        x: x - offset, 
-        y: y + offset, 
-        r: radiusGovernment, 
-        color: colors.government 
-      }
-    ]
-    
-    // Draw each circle
-    positions.forEach(pos => {
-      p.fill(pos.color)
+    // Draw each circle using shared position configuration
+    MOTIF_POSITIONS.forEach(pos => {
+      const radius = radiusScale(values[pos.dataKey])
+      p.fill(colors[pos.colorKey])
       p.noStroke()
-      p.circle(pos.x, pos.y, pos.r * 2)
+      p.circle(
+        x + pos.xOffset * size,
+        y + pos.yOffset * size,
+        radius * 2
+      )
     })
   }
 }
