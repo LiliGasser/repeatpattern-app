@@ -112,7 +112,7 @@ const createSketch = () => (p) => {
           const xPosLeft = props.canvasDimensions.width * 0.18
           const xPosRight = props.canvasDimensions.width * 0.38
           const legendTextYStart = topTextY + pointsToPixels(50)
-          const legendTextYStart2 = centerMotifY + size * 0.3 - pointsToPixels(8) 
+          const legendTextYStart2 = centerMotifY + size * 0.26
   
           // WTP (top-left)
           p.textAlign(p.RIGHT, p.BOTTOM)
@@ -187,17 +187,24 @@ const createSketch = () => (p) => {
             }
           })
   
-          // Government (bottom-left) - RIGHT ALIGNED
+          // Government (bottom-left)
+          // TODO positioning for United Arab Emirates
           p.textAlign(p.RIGHT, p.BOTTOM)
-          p.fill(colors.government)
-          
+          p.fill(colors.government) 
+
           const govLines = explanation.government.split('\n')
-          currentY = legendTextYStart2  // Start at base position, same as WTP Belief
+          currentY = legendTextYStart2 - txtHeightDifference
           govLines.forEach((line, index) => {
             if (index === 0) {
-              // First line (percentage) - add extra space for larger font
-              //currentY += lineHeightPercent  // Extra space for percentage
-              p.textSize(fontSizePercent)
+              // Check if first line contains a percentage (ends with %)
+              const hasPercentage = line.trim().endsWith('%')
+              if (hasPercentage) {
+                // First line is a percentage - use larger font
+                p.textSize(fontSizePercent)
+              } else {
+                // First line is regular text (countries without gov data)
+                p.textSize(fontSizeLegend)
+              }
               p.text(line, xPosLeft, currentY)
               currentY += lineHeightLegend
             } else {
