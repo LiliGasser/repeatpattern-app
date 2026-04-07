@@ -63,7 +63,8 @@ const createSketch = () => (p) => {
         const topTextY = props.canvasDimensions.height*0.02
         const size = Math.min(props.drawableArea.width, props.drawableArea.height) * 0.26
 
-        // Adjust size for wind wheel motif (45° rotation makes it extend beyond bounds)
+        // Adjust size for wind wheel motif 
+        // (45° rotation makes it extend beyond bounds)
         const adjustedSize = props.motif === 'wind-wheel' ? size * 0.82 : size
         
         // Draw motif
@@ -91,8 +92,8 @@ const createSketch = () => (p) => {
         const titleText = "Sag’s weiter"
         p.fill(0)
         p.textAlign(p.LEFT, p.TOP) // TODO Bottom needed, and then p.TextAscent?
-        p.textSize(pointsToPixels(18))
-        p.textFont(typographyConfig.value.titleFont)  // Set title font
+        p.textSize(pointsToPixels(20))
+        p.textFont(typographyConfig.value.titleFont)
         console.log('title font', typographyConfig.value.titleFont)
         p.text(
           titleText,
@@ -112,9 +113,9 @@ const createSketch = () => (p) => {
           // Get colors from the selected palette
           const colors = getMotifColors(props.palette)
   
-          // Position settings from original code
-          const xPosLeft = props.canvasDimensions.width * 0.18
-          const xPosRight = props.canvasDimensions.width * 0.38
+          // Position settings
+          const xPosLeft = props.canvasDimensions.width * 0.172
+          const xPosRight = props.canvasDimensions.width * 0.388
           const legendTextYStart = topTextY + pointsToPixels(50)
           const legendTextYStart2 = centerMotifY + size * 0.26
   
@@ -124,7 +125,7 @@ const createSketch = () => (p) => {
           
           // Split explanation into lines and render each
           const wtpLines = explanation.wtp.split('\n')
-          const fontSizePercent = pointsToPixels(9) 
+          const fontSizePercent = pointsToPixels(9.5) 
           const lineHeightPercent = fontSizePercent * 1.2
           let currentY = legendTextYStart
           wtpLines.forEach((line, index) => {
@@ -192,7 +193,6 @@ const createSketch = () => (p) => {
           })
   
           // Government (bottom-left)
-          // TODO positioning for United Arab Emirates
           p.textAlign(p.RIGHT, p.BOTTOM)
           p.fill(colors.government) 
 
@@ -228,7 +228,7 @@ const createSketch = () => (p) => {
         p.text(
           paragraphText,
           leftTextX,
-          props.canvasDimensions.height*0.53,
+          props.canvasDimensions.height*0.538,
         )
         
         // SEPARATOR - Vertical text in the middle
@@ -246,14 +246,14 @@ const createSketch = () => (p) => {
         p.pop()
 
         // SOURCE Information at the bottom
-        const infoText = "Weiterlesen: https://rcap.netlify.app . Datenquelle: Global Climate Change Survey https://gccs.iza.org/"
+        const infoText = "Weiterlesen: rcap.netlify.app . Datenquelle: Global Climate Change Survey gccs.iza.org/"
         p.fill(0)
         p.textAlign(p.LEFT, p.BOTTOM)
         p.textSize(pointsToPixels(4))
         p.text(
           infoText,
           leftTextX,
-          props.canvasDimensions.height*0.97,  // TODO same height as country name on front
+          props.canvasDimensions.height*0.972,  // TODO same height as country name on front
         )
 
         // RIGHT HALF - 4 horizontal lines for address

@@ -4,8 +4,9 @@ import Papa from 'papaparse'
  * Create four-part explanation for the motif elements
  */
 function createMotifExplanation(row) {
+  // use abbreviated declension of countryname
   const country_de_prefix = row.country_de_prefix || 'in'
-  const country_de_decl = row.country_de_decl || row.country_de || ''
+  const country_de_decl = row.country_de_decl_abbr || row.country_de || ''
   
   // Countries without government data
   const noGovData = ['Saudi-Arabien', 'Myanmar', 'Vereinigte Arabische Emirate']

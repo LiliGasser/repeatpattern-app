@@ -34,7 +34,7 @@ export function usePostcardConfig() {
 
   // Configuration options
   const selectedCountry = ref(null)
-  const selectedMotif = ref('circles')
+  const selectedMotif = ref('angle-circles')
   const selectedSymmetry = ref('translation')
   const layout = ref('landscape') // 'portrait' or 'landscape' - only for FRONT
   const frameMarginRatio = ref(0.05) // 0 to 0.2 - only for FRONT

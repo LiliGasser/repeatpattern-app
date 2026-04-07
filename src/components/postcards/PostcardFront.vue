@@ -107,7 +107,7 @@ const createSketch = () => (p) => {
       p.noStroke()
       p.textAlign(p.CENTER, p.CENTER)
       p.textFont(textStyles.value.body.family)  // Use main font
-      p.textSize(pointsToPixels(12))  // 12pt font, DPI-dependent
+      p.textSize(pointsToPixels(10.5))  // 12pt font, DPI-dependent
       p.text(
         props.countryData.country_de,
         p.width / 2,
