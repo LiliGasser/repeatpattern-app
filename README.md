@@ -2,7 +2,7 @@
 
 Created during CAS Generative Data Design at Hochschule für Künste Bern, August–September 2025.
 
-**[Start creating yourself](https://rcap-app.netlify.app):** Design your climate postcards with generative patterns.
+**Start creating yourself:** [Design your climate postcards with generative patterns.](https://rcap-app.netlify.app)
 
 This is the Vue.js adaption of the [original JavaScript version](https://github.com/LiliGasser/repeatpattern).
 
