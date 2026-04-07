@@ -94,6 +94,6 @@ This is the Vue.js adaption of the [original JavaScript version](https://github.
 
 ## Project status
 
-Last updated: September 2025
+Last updated: April 2026
 
-Version: 0.1
+Version: 0.2
