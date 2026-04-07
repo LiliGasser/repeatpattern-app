@@ -148,7 +148,7 @@ const exportPdf = async () => {
 
 .dashboard-header h1 {
   font-size: 2.5rem;
-  color: #2c3e50;
+  color: #000000;
   margin: 0;
 }
 
@@ -186,10 +186,10 @@ const exportPdf = async () => {
 .export-btn {
   width: 100%;
   padding: 0.75rem 1rem;
-  background-color: #0066ff;
-  color: white;
+  background-color: #000000;
+  color: #ffffff;
   border: none;
-  border-radius: 4px;
+  border-radius: 24px;
   font-size: 1rem;
   font-weight: 600;
   margin-top: 1.5rem;
@@ -202,7 +202,7 @@ const exportPdf = async () => {
 }
 
 .export-btn:hover {
-  background-color: #0052cc;
+  background-color: #0052cc;  /* TODO */
   transform: translateY(-1px);
   box-shadow: 0 2px 8px rgba(0, 102, 255, 0.3);
 }

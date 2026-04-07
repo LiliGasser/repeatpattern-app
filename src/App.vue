@@ -21,7 +21,7 @@ import Dashboard from './views/Dashboard.vue'
                Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color: #2c3e50;
+  color: #000000;   /* for dropdown, etc. names (or colors not otherwise defined?) */
   min-height: 100vh;
   background-color: #f5f5f5;
 }
