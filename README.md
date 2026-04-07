@@ -4,8 +4,6 @@ Created during CAS Generative Data Design at Hochschule für Künste Bern, Augus
 
 **Start creating yourself:** [Design your climate postcards with generative patterns.](https://rcap-app.netlify.app)
 
-This is the Vue.js adaption of the [original JavaScript version](https://github.com/LiliGasser/repeatpattern).
-
 ## Project description
 
 The global climate change survey found that the majority of people in Switzerland and across the world are willing to fight global warning and underestimate the willingness of others. Also, the vast majority wants more climate action from the population and the national governments.
@@ -71,6 +69,8 @@ For each setting, the front and back of a postcard are created. The front contai
 
 
 ## Setup and installation
+
+This is the Vue.js adaption of the [original JavaScript version](https://github.com/LiliGasser/repeatpattern).
 
 ### Prerequisites
 
