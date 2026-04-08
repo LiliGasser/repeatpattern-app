@@ -46,6 +46,7 @@ import Dashboard from './views/Dashboard.vue'
   --control-font-size: 0.95rem;
   --label-font-size: 0.9rem;
   --label-font-weight: 500;
+  --colorpicker-font-size: 0.85rem;
 }
 
 /* Global styles that apply to the entire app */

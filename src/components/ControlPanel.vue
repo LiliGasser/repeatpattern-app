@@ -1,7 +1,7 @@
 <template>
   <div class="control-panel">
     <div class="control-group">
-      <label>Country</label>
+      <label class="control-label">Country</label>
       <CountrySelector 
         :model-value="country" 
         @update:model-value="$emit('update:country', $event)"
@@ -10,7 +10,7 @@
     </div>
     
     <div class="control-group">
-      <label>Motif</label>
+      <label class="control-label">Motif</label>
       <MotifSelector 
         :model-value="motif"
         @update:model-value="$emit('update:motif', $event)"
@@ -18,7 +18,7 @@
     </div>
     
     <div class="control-group">
-      <label>Symmetry</label>
+      <label class="control-label">Symmetry</label>
       <SymmetrySelector 
         :model-value="symmetry"
         @update:model-value="$emit('update:symmetry', $event)"
@@ -26,7 +26,7 @@
     </div>
     
     <div class="control-group">
-      <label>Layout</label>
+      <label class="control-label">Layout</label>
       <LayoutSelector 
         :model-value="layout"
         @update:model-value="$emit('update:layout', $event)"
@@ -34,7 +34,7 @@
     </div>
     
     <div class="control-group">
-      <label>Frame margin (%)</label>
+      <label class="control-label">Frame margin (%)</label>
       <FrameMarginSlider 
         :model-value="frameMargin"
         @update:model-value="$emit('update:frameMargin', $event)"
@@ -42,7 +42,7 @@
     </div>
     
     <div class="control-group">
-      <label>Motifs per row</label>
+      <label class="control-label">Motifs per row</label>
       <MotifsPerRowInput 
         :model-value="motifsPerRow"
         @update:model-value="$emit('update:motifsPerRow', $event)"
@@ -57,7 +57,7 @@
     </div>
 
     <div class="control-group">
-      <label>Color palette</label>
+      <label class="control-label">Color palette</label>
       <PaletteSelector 
         :model-value="palette"
         @update:model-value="$emit('update:palette', $event)"
@@ -65,35 +65,37 @@
     </div>
 
     <!-- Individual Color Controls -->
-    <div class="control-group colors-group">
-      <label>Custom colors</label>
-      <div class="color-grid">
-        <ColorPicker 
-          label="WTP"
-          :model-value="customColors.wtp"
-          @update:model-value="handleColorChange('wtp', $event)"
-        />
-        <ColorPicker 
-          label="Norm"
-          :model-value="customColors.norm"
-          @update:model-value="handleColorChange('norm', $event)"
-        />
-        <ColorPicker 
-          label="Government"
-          :model-value="customColors.government"
-          @update:model-value="handleColorChange('government', $event)"
-        />
-        <ColorPicker 
-          label="WTP Belief"
-          :model-value="customColors.wtpBelief"
-          @update:model-value="handleColorChange('wtpBelief', $event)"
-        />
+    <div class="control-group">
+      <label class="control-label">Custom colors</label>
+      <div colors-group>
+        <div class="color-grid">
+          <ColorPicker 
+            label="WTP"
+            :model-value="customColors.wtp"
+            @update:model-value="handleColorChange('wtp', $event)"
+          />
+          <ColorPicker 
+            label="Norm"
+            :model-value="customColors.norm"
+            @update:model-value="handleColorChange('norm', $event)"
+          />
+          <ColorPicker 
+            label="Government"
+            :model-value="customColors.government"
+            @update:model-value="handleColorChange('government', $event)"
+          />
+          <ColorPicker 
+            label="WTP Belief"
+            :model-value="customColors.wtpBelief"
+            @update:model-value="handleColorChange('wtpBelief', $event)"
+          />
+        </div>
       </div>
     </div>
     <p>WTP: Willingness to participate</p>
 
     <div class="control-group">
-      <label>Title font</label>
+      <label class="control-label">Title font</label>
       <FontSelector 
         :model-value="titleFont"
         @update:model-value="$emit('update:titleFont', $event)"
@@ -102,7 +104,7 @@
     </div>
     
     <div class="control-group">
-      <label>Main font</label>
+      <label class="control-label">Main font</label>
       <FontSelector 
         :model-value="mainFont"
         @update:model-value="$emit('update:mainFont', $event)"
@@ -181,13 +183,13 @@ function handleColorChange(key, value) {
 
 .control-group label {
   font-weight: 600;
-  font-size: 0.9rem;
+  font-size: var(--label-font-size);
 }
 
 .colors-group {
   padding: 0.75rem;
-  background-color: #f8f9fa;
-  border-radius: 4px;
+  background-color: var(--background-color-secondary);
+  border-radius: var(--border-radius-sm);
   border: 1px solid #e0e0e0;
 }
 

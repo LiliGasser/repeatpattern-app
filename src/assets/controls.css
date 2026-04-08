@@ -76,7 +76,7 @@
   outline: none;
   box-shadow: var(--focus-shadow);
 }
- 
+
 /* Dropdowns */
 /* --------- */
 .dropdown-base {
@@ -246,3 +246,68 @@
 .slider-base:focus::-moz-range-thumb {
   box-shadow: var(--focus-shadow);
 }
+
+/* Color pickers */
+/* ------------- */
+.color-picker-control {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+ 
+.color-label {
+  font-size: var(--colorpicker-font-size);
+  color: var(--text-color);
+}
+ 
+.color-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+ 
+.color-input {
+  width: 50px;
+  height: 36px;
+  border: 1px solid var(--border-color);
+  border-radius: 0px;
+  cursor: pointer;
+  background: var(--background-color-secondary);
+}
+ 
+.color-input::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+ 
+.color-input::-webkit-color-swatch {
+  border: none;
+}
+ 
+.color-input::-moz-color-swatch {
+  border: none;
+}
+ 
+.color-input:focus {
+  outline: none;
+  border-color: var(--border-color-focus);
+  box-shadow: var(--focus-shadow);
+}
+ 
+.color-input:hover {
+  border-color: var(--border-color-hover);
+}
+ 
+.color-value {
+  font-family: monospace;
+  font-size: var(--colorpicker-font-size);
+  color: var(--text-color);
+  user-select: all;
+}
+
+/* Labels */
+/* ------ */
+.control-label{
+  font-size: var(--control-font-size);
+  color: var(--text-color);
+}
+ 
