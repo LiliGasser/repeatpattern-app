@@ -140,7 +140,7 @@
         </div>
         
         <div class="control-group">
-          <label class="control-label">Main</label>
+          <label class="control-label">Text</label>
           <FontSelector 
             :model-value="mainFont"
             @update:model-value="$emit('update:mainFont', $event)"
@@ -224,7 +224,7 @@ function handleColorChange(key, value) {
 }
 
 .control-group label {
-  font-weight: 600;
+  font-weight: var(--label-font-weight);
   font-size: var(--label-font-size);
 }
 
@@ -257,16 +257,16 @@ function handleColorChange(key, value) {
 }
 
 .accordion-icon {
-  font-size: 0.75rem;
-  color: #666;
-  width: 12px;
+  font-size: 0.8rem;
+  color: var(--element-color);
+  width: 10px;
+  line-height: 1;
   transition: transform 0.2s;
 }
 
 .accordion-title {
-  font-size: 0.9rem;
-  font-weight: 700;
-  text-transform: uppercase;
+  font-size: var(--label-font-size);
+  font-weight: 600;
   letter-spacing: 0.5px;
   color: var(--text-color);
 }

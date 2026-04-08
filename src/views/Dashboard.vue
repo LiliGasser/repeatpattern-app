@@ -160,9 +160,8 @@ const exportPdf = async () => {
 
 <style scoped>
 .dashboard {
-  max-width: 1400px;
+  max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem;
 }
 
 .dashboard-header {

@@ -58,12 +58,17 @@ import Dashboard from './views/Dashboard.vue'
 }
 
 #app {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, 
-               Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+  /* Layout */
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: left;
+  
+  /* Styling */
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: var(--text-color);
-  min-height: 100vh;
   background-color: var(--background-color);
+  min-height: 100vh;
 }
 </style>
