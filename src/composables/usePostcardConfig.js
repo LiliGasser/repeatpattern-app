@@ -1,5 +1,5 @@
 import { ref, watch, computed } from 'vue'
-import { colorPalettes, customPalette, loadPaletteToCustom } from '../motifs/colors'
+import { colorPalettes, loadPaletteToCustom } from '../motifs/colors'
 import { setTypographyDPI, setTitleFont, setMainFont, typographyConfig } from '../utils/typography'
 
 export function usePostcardConfig() {
@@ -13,11 +13,6 @@ export function usePostcardConfig() {
   setTitleFont(titleFont.value)
   setMainFont(mainFont.value)
 
-  // DEBUG LOGS
-  console.log('Initial titleFont:', titleFont.value)
-  console.log('Initial mainFont:', mainFont.value)
-  console.log('Typography config after init:', { ...typographyConfig.value })
-  
   // Watch DPI changes and update typography
   watch(dpi, (newDpi) => {
     setTypographyDPI(newDpi)
@@ -43,12 +38,11 @@ export function usePostcardConfig() {
   const selectedPalette = ref('icecream')
   
   // Convert reactive object to computed so Vue tracks it properly
-  // Use customPalette directly for proper reactivity
   const customColors = computed(() => ({
-    wtp: customPalette.wtp,
-    wtpBelief: customPalette.wtpBelief,
-    norm: customPalette.norm,
-    government: customPalette.government
+    wtp: colorPalettes.custom.wtp,
+    wtpBelief: colorPalettes.custom.wtpBelief,
+    norm: colorPalettes.custom.norm,
+    government: colorPalettes.custom.government
   }))
 
   // Watch palette changes to update custom colors when switching palettes

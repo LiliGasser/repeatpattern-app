@@ -94,7 +94,6 @@ const createSketch = () => (p) => {
         p.textAlign(p.LEFT, p.TOP) // TODO Bottom needed, and then p.TextAscent?
         p.textSize(pointsToPixels(20))
         p.textFont(typographyConfig.value.titleFont)
-        console.log('title font', typographyConfig.value.titleFont)
         p.text(
           titleText,
           leftTextX,
