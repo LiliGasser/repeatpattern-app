@@ -34,6 +34,10 @@
   background-color: var(--element-color-hover);
   box-shadow: var(--box-shadow);
 }
+
+.btn-primary:active:not(:disabled) {
+  transform: scale(0.98);
+}
  
 .btn-full-width {
   width: 100%;

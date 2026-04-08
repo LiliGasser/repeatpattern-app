@@ -68,7 +68,7 @@ const exportPdf = async () => {
   <div class="dashboard">
     <header class="dashboard-header">
       <h1>Repeat Pattern Creator</h1>
-      <p class="subtitle">Design your country's climate pattern</p>
+      <p class="subtitle">Design your country's climate action pattern</p>
 
       <div class="description-wrapper">
         <button @click="showDescription = !showDescription" class="toggle-description">
@@ -181,19 +181,15 @@ const exportPdf = async () => {
   font-size: 1.1rem;
   color: var(--text-color);
   margin: 0 0 1rem 0;
-  font-weight: 400;
+  font-weight: var(--text-font-weight);
 }
 
-.description-wrapper {
-  margin-top: 1rem;
-}
- 
 .toggle-description {
   background: none;
   border: none;
   color: var(--element-color);
   font-size: 1rem;
-  font-weight: 400;
+  font-weight: var(--text-font-weight);
   cursor: pointer;
   padding: 0;
   display: flex;
@@ -212,14 +208,14 @@ const exportPdf = async () => {
 }
 
 .dashboard-header .description {
-  font-size: 0.95rem;
+  font-size: 1rem;
   color: var(--text-color);
   max-width: 700px;
-  line-height: 1.6;
+  line-height: 1.5;
 }
  
 .dashboard-header .description p {
-  margin: 0 0 0.75rem 0;
+  margin: 0.25rem 0 0.75rem 0;
 }
  
 .dashboard-header .description ul {
@@ -229,7 +225,7 @@ const exportPdf = async () => {
 }
  
 .dashboard-header .description li {
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.3rem;
 }
  
 .dashboard-header .description a {
