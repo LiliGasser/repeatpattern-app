@@ -1,7 +1,7 @@
 <template>
   <div class="segmented-control">
     <button
-      v-for="option in paletteOptions"
+      v-for="option in paletteSelectorOptions"
       :key="option.value"
       type="button"
       @click="$emit('update:modelValue', option.value)"
@@ -13,7 +13,7 @@
 </template>
 
 <script setup>
-import { paletteOptions } from '../../motifs/colors'
+import { paletteSelectorOptions } from '../../motifs/colors'
 
 defineProps({
   modelValue: String
