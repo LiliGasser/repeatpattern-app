@@ -214,7 +214,7 @@ const exportPdf = async () => {
 
 .export-btn:focus {
   outline: none;
-  box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.3);
+  box-shadow: var(--focus-shadow);
 }
 
 .export-btn:disabled {

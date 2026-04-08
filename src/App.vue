@@ -9,11 +9,13 @@ import Dashboard from './views/Dashboard.vue'
 </script>
 
 <style>
+@import './assets/controls.css';
+
 /* CSS Variables for consistent styling */
 :root {
   /* Colors */
   --element-color: #000000;
-  --element-color-hover: #0052cc; /* TODO adjust */
+  --element-color-hover: #444444;
   --text-color: #000000;
   --text-color-secondary: #ffffff;
   --background-color: #f5f5f5;
@@ -30,7 +32,8 @@ import Dashboard from './views/Dashboard.vue'
   --border-radius-xl: 24px;
   
   /* Effects */
-  --focus-shadow: 0 0 0 3px rgba(0, 102, 255, 0.1);
+  /* --focus-shadow: 0 0 0 3px rgba(0, 102, 255, 0.1); */
+  --focus-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
   --box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   
   /* Spacing */
@@ -39,7 +42,7 @@ import Dashboard from './views/Dashboard.vue'
   
   /* Typography */
   --h1-font-size: 2.5rem;
-  --h1-font-weight: 500rem;
+  --h1-font-weight: 500;
   --control-font-size: 0.95rem;
   --label-font-size: 0.9rem;
   --label-font-weight: 500;
