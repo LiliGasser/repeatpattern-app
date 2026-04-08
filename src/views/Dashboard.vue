@@ -42,6 +42,9 @@ const {
 // Access customColors from config object
 const customColors = config.customColors
 
+// Collapsible description toggle
+const showDescription = ref(false)
+
 // Refs to hold sketch instances from child components
 const frontSketchRef = ref(null)
 const backSketchRef = ref(null)
@@ -65,6 +68,26 @@ const exportPdf = async () => {
   <div class="dashboard">
     <header class="dashboard-header">
       <h1>Repeat Pattern Creator</h1>
+      <p class="subtitle">Create your own pattern based on data from the Global Climate Change Survey.</p>
+
+      <div class="description-wrapper">
+        <button @click="showDescription = !showDescription" class="toggle-description">
+          {{ showDescription ? '▼' : '▶' }} About the data
+        </button>
+        <div v-if="showDescription" class="description">
+          <p>
+            The <a href="https://gccs.iza.org" target="_blank" rel="noopener noreferrer">Global Climate Change Survey</a> (2024) 
+            asked 130,000 people across 125 countries about their climate beliefs and actions. 
+            Each country's data creates a unique pattern based on four variables:
+          </p>
+          <ul>
+            <li><strong>WTP:</strong> Willingness to participate in climate action</li>
+            <li><strong>Norm:</strong> Social norms around climate action</li>
+            <li><strong>WTP Belief:</strong> Beliefs about others' willingness to participate</li>
+            <li><strong>Government:</strong> Expectations for government action</li>
+          </ul>
+        </div>
+      </div>
     </header>
     
     <div v-if="loading" class="loading">Loading country data...</div>
@@ -143,14 +166,80 @@ const exportPdf = async () => {
 
 .dashboard-header {
   text-align: left;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
 }
 
 .dashboard-header h1 {
   font-size: var(--h1-font-size);
   font-weight: var(--h1-font-weight);
   color: var(--text-color);
+  margin: 0 0 1rem 0;
+}
+
+.dashboard-header .subtitle {
+  font-size: 1.1rem;
+  color: var(--text-color);
+  margin: 0 0 1rem 0;
+  font-weight: 400;
+}
+
+.description-wrapper {
+  margin-top: 1rem;
+}
+ 
+.toggle-description {
+  background: none;
+  border: none;
+  color: var(--element-color);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: color 0.2s;
+}
+ 
+.toggle-description:hover {
+  color: var(--element-color-hover);
+}
+ 
+.toggle-description:focus {
+  outline: none;
+  text-decoration: underline;
+}
+
+.dashboard-header .description {
+  font-size: 0.95rem;
+  color: var(--text-color);
+  max-width: 700px;
+  line-height: 1.6;
+}
+ 
+.dashboard-header .description p {
+  margin: 0 0 0.75rem 0;
+}
+ 
+.dashboard-header .description ul {
   margin: 0;
+  padding-left: 1.5rem;
+  list-style-type: disc;
+}
+ 
+.dashboard-header .description li {
+  margin-bottom: 0.5rem;
+}
+ 
+.dashboard-header .description a {
+  color: var(--element-color);
+  text-decoration: none;
+  border-bottom: 1px solid var(--element-color);
+}
+ 
+.dashboard-header .description a:hover {
+  color: var(--element-color-hover);
+  border-bottom-color: var(--element-color-hover);
 }
 
 .loading,
