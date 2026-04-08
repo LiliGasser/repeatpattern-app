@@ -34,7 +34,7 @@
     </div>
     
     <div class="control-group">
-      <label>Frame margin</label>
+      <label>Frame margin (%)</label>
       <FrameMarginSlider 
         :model-value="frameMargin"
         @update:model-value="$emit('update:frameMargin', $event)"
@@ -93,7 +93,7 @@
     <p>WTP: Willingness to participate</p>
 
     <div class="control-group">
-      <label>Title Font</label>
+      <label>Title font</label>
       <FontSelector 
         :model-value="titleFont"
         @update:model-value="$emit('update:titleFont', $event)"
@@ -102,7 +102,7 @@
     </div>
     
     <div class="control-group">
-      <label>Main Font</label>
+      <label>Main font</label>
       <FontSelector 
         :model-value="mainFont"
         @update:model-value="$emit('update:mainFont', $event)"

@@ -7,9 +7,17 @@
       min="0"
       max="0.2"
       step="0.01"
-      class="slider"
+      class="slider-base"
     />
-    <span class="value">{{ (modelValue * 100).toFixed(0) }}%</span>
+    <input n
+      type="number" 
+      :value="(modelValue * 100).toFixed(0)"
+      @input="$emit('update:modelValue', Number($event.target.value) / 100)"
+      min="0"
+      max="20"
+      step="1"
+      class="input-base number-input"
+    />
   </div>
 </template>
 
@@ -28,50 +36,8 @@ defineEmits(['update:modelValue'])
   align-items: center;
 }
 
-.slider {
-  flex: 1;
-  height: 6px;
-  border-radius: 3px;
-  background: #ddd;
-  outline: none;
-  cursor: pointer;
-}
-
-.slider::-webkit-slider-thumb {
-  appearance: none;
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  background: #0066ff;
-  cursor: pointer;
-}
-
-.slider::-moz-range-thumb {
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  background: #0066ff;
-  cursor: pointer;
-  border: none;
-}
-
-.slider:focus {
-  outline: none;
-}
-
-.slider:focus::-webkit-slider-thumb {
-  box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.2);
-}
-
-.slider:focus::-moz-range-thumb {
-  box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.2);
-}
-
-.value {
-  min-width: 45px;
-  text-align: right;
-  font-variant-numeric: tabular-nums;
-  font-size: 0.9rem;
-  color: #666;
+.number-input {
+  width: 50px;
+  text-align: center;
 }
 </style>
