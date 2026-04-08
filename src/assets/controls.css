@@ -1,3 +1,82 @@
+/* Buttons */
+/* ------- */
+.btn-base {
+  padding: 0.75rem 1rem;
+  border: none;
+  border-radius: var(--border-radius-xl);
+  font-size: var(--control-font-size);
+  font-weight: var(--label-font-weight);
+  margin-top: 1.5rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  user-select: none;
+}
+ 
+.btn-base:focus {
+  outline: none;
+  box-shadow: var(--focus-shadow);
+}
+ 
+.btn-base:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+ 
+.btn-primary {
+  background-color: var(--element-color);
+  color: var(--text-color-secondary);
+}
+ 
+.btn-primary:hover:not(:disabled) {
+  background-color: var(--element-color-hover);
+  box-shadow: var(--box-shadow);
+}
+ 
+.btn-full-width {
+  width: 100%;
+}
+
+/* Segmented controls */
+/* ------------------ */
+.segmented-control {
+  display: flex;
+  background-color: var(--background-color);
+  border-radius: var(--border-radius-sm);
+  padding: 2px;
+  gap: 2px;
+}
+ 
+.segment {
+  flex: 1;
+  padding: var(--control-padding);
+  border: none;
+  background-color: transparent;
+  color: var(--text-color);
+  font-size: var(--control-font-size);
+  font-weight: var(--label-font-weight);
+  border-radius: calc(var(--border-radius-sm) - 2px);
+  cursor: pointer;
+  transition: all 0.2s;
+  user-select: none;
+}
+ 
+.segment:hover:not(.active) {
+  background-color: var(--border-color);
+}
+ 
+.segment.active {
+  background-color: var(--element-color);
+  color: var(--text-color-secondary);
+}
+ 
+.segment:focus {
+  outline: none;
+  box-shadow: var(--focus-shadow);
+}
+ 
 /* Dropdowns */
 /* --------- */
 .dropdown-base {

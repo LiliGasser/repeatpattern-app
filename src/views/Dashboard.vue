@@ -97,7 +97,7 @@ const exportPdf = async () => {
           @update:main-font="mainFont = $event"
           :countries="countries"
         />
-        <button @click="exportPdf" class="export-btn">
+        <button @click="exportPdf" class="btn-base btn-primary btn-full-width">
           Export PDF
         </button>
       </aside>
@@ -182,46 +182,6 @@ const exportPdf = async () => {
   top: 2rem;
   max-height: calc(100vh - 4rem);
   overflow-y: auto;
-}
-
-.export-btn {
-  width: 100%;
-  padding: 0.75rem 1rem;
-  background-color: var(--element-color);
-  color: var(--text-color-secondary);
-  border: none;
-  border-radius: var(--border-radius-xl);
-  font-size: var(--label-font-size);
-  font-weight: var(--label-font-weight);
-  margin-top: 1.5rem;
-  cursor: pointer;
-  transition: all 0.2s;
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  user-select: none;
-}
-
-/* TODO what is needed? box-shadow? */
-.export-btn:hover {
-  background-color: var(--element-color-hover); 
-  box-shadow: 0 2px 8px rgba(0, 102, 255, 0.3);
-}
-
-.export-btn:active {
-  box-shadow: 0 1px 4px rgba(0, 102, 255, 0.2);
-}
-
-.export-btn:focus {
-  outline: none;
-  box-shadow: var(--focus-shadow);
-}
-
-.export-btn:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
-  transform: none;
-  box-shadow: none;
 }
 
 /* RIGHT – canvases */
