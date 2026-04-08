@@ -147,8 +147,9 @@ const exportPdf = async () => {
 }
 
 .dashboard-header h1 {
-  font-size: 2.5rem;
-  color: #000000;
+  font-size: var(--h1-font-size);
+  font-weight: var(--h1-font-weight);
+  color: var(--text-color);
   margin: 0;
 }
 
@@ -160,7 +161,7 @@ const exportPdf = async () => {
 }
 
 .error {
-  color: #d63031;
+  color: var(--error-color);
 }
 
 /* Two-column layout */
@@ -173,10 +174,10 @@ const exportPdf = async () => {
 /* LEFT – control panel */
 .sidebar {
   flex: 0 0 280px;               /* fixed width */
-  background: white;
+  background: var(--background-color-secondary);
   padding: 1.5rem;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--box-shadow);
   position: sticky;
   top: 2rem;
   max-height: calc(100vh - 4rem);
@@ -186,12 +187,12 @@ const exportPdf = async () => {
 .export-btn {
   width: 100%;
   padding: 0.75rem 1rem;
-  background-color: #000000;
-  color: #ffffff;
+  background-color: var(--element-color);
+  color: var(--text-color-secondary);
   border: none;
-  border-radius: 24px;
-  font-size: 1rem;
-  font-weight: 600;
+  border-radius: var(--border-radius-xl);
+  font-size: var(--label-font-size);
+  font-weight: var(--label-font-weight);
   margin-top: 1.5rem;
   cursor: pointer;
   transition: all 0.2s;
@@ -201,14 +202,13 @@ const exportPdf = async () => {
   user-select: none;
 }
 
+/* TODO what is needed? box-shadow? */
 .export-btn:hover {
-  background-color: #0052cc;  /* TODO */
-  transform: translateY(-1px);
+  background-color: var(--element-color-hover); 
   box-shadow: 0 2px 8px rgba(0, 102, 255, 0.3);
 }
 
 .export-btn:active {
-  transform: translateY(0);
   box-shadow: 0 1px 4px rgba(0, 102, 255, 0.2);
 }
 
