@@ -262,7 +262,7 @@ const exportPdf = async () => {
 
 /* LEFT – control panel */
 .sidebar {
-  flex: 0 0 280px;               /* fixed width */
+  flex: 0 0 380px;               /* fixed width */
   background: var(--background-color-secondary);
   padding: 1.5rem;
   border-radius: var(--border-radius-md);

@@ -1,17 +1,15 @@
 <template>
-  <select 
-    :value="modelValue" 
-    @change="$emit('update:modelValue', $event.target.value)"
-    class="dropdown-base dropdown-with-arrow" 
-  >
-    <option 
-      v-for="option in paletteOptions" 
-      :key="option.value" 
-      :value="option.value"
+  <div class="segmented-control">
+    <button
+      v-for="option in paletteOptions"
+      :key="option.value"
+      type="button"
+      @click="$emit('update:modelValue', option.value)"
+      :class="['segment', { active: modelValue === option.value }]"
     >
       {{ option.label }}
-    </option>
-  </select>
+    </button>
+  </div>
 </template>
 
 <script setup>
