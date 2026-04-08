@@ -68,24 +68,25 @@ const exportPdf = async () => {
   <div class="dashboard">
     <header class="dashboard-header">
       <h1>Repeat Pattern Creator</h1>
-      <p class="subtitle">Create your own pattern based on data from the Global Climate Change Survey.</p>
+      <p class="subtitle">Design your country's climate pattern</p>
 
       <div class="description-wrapper">
         <button @click="showDescription = !showDescription" class="toggle-description">
-          {{ showDescription ? '▼' : '▶' }} About the data
+          {{ showDescription ? '▼' : '▶' }} What do the patterns mean?
         </button>
         <div v-if="showDescription" class="description">
           <p>
-            The <a href="https://gccs.iza.org" target="_blank" rel="noopener noreferrer">Global Climate Change Survey</a> (2024) 
-            asked 130,000 people across 125 countries about their climate beliefs and actions. 
-            Each country's data creates a unique pattern based on four variables:
+            The <a href="https://gccs.iza.org" target="_blank" rel="noopener noreferrer">Global Climate Change Survey</a> asked 130,000 people across 125 countries about their climate beliefs and actions. The four percentage values derived for each country shape a data-based pattern.
           </p>
           <ul>
-            <li><strong>WTP:</strong> Willingness to participate in climate action</li>
-            <li><strong>Norm:</strong> Social norms around climate action</li>
-            <li><strong>WTP Belief:</strong> Beliefs about others' willingness to participate</li>
-            <li><strong>Government:</strong> Expectations for government action</li>
+            <li><strong>WTP:</strong> Share willing to contribute 1% of income to fight global warming (WTP: willingness to participate)</li>
+            <li><strong>WTP Belief:</strong> Perceived average share of others willing to contribute 1% of income</li>
+            <li><strong>Norm:</strong> Share saying that other in their country should try to fight global warming</li>
+            <li><strong>Government:</strong> Share saying that national governments should do more</li>
           </ul>
+          <p>
+            <a href="https://rcap.netlify.app" target="_blank" rel="noopener norefferer">Learn how the patterns are created</a> 
+          </p>
         </div>
       </div>
     </header>
@@ -191,8 +192,8 @@ const exportPdf = async () => {
   background: none;
   border: none;
   color: var(--element-color);
-  font-size: 0.95rem;
-  font-weight: 600;
+  font-size: 1rem;
+  font-weight: 400;
   cursor: pointer;
   padding: 0;
   display: flex;
